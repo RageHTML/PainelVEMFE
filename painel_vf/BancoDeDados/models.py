@@ -8,22 +8,22 @@ load_dotenv()
 
 class Cliente(SQLModel, table=True):
   id: int | None = Field(default=None, primary_key=True)
-  nome_completo: str
-  nome_mae: str | None = None
+  nome_completo: str = Field()
+  nome_mae: str | None = Field()
   cpf: str = Field(unique=True)
-  data_nascimento: date
-  endereco: str | None = None
+  data_nascimento: date = Field()
+  endereco: str | None = Field()
 
 
 class Produto(SQLModel, table=True):
   id: int | None = Field(default=None, primary_key=True)
   cliente_id: int | None = Field(default=None, foreign_key="cliente.id")
-  descricao: str | None = None
-  valor: int
-  forma_pagamento: int
+  descricao: str | None = Field(default=None)
+  valor: float = Field()
+  forma_pagamento: str | None = Field()
   status: str = Field(default="pendente")
   data_pedido: date = Field(default_factory=date.today)
-  data_entregue: date | None = None
+  data_entregue: date | None = Field()
 
 
 engine = create_engine(os.getenv("DATABASE_URL"), echo=True)
