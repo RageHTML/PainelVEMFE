@@ -2,12 +2,19 @@
 <html>
     <head>
         <title>PainelVF</title>
-        <script src="./static/java.js"></script>
+        <script src="./static/java.js" defer></script> 
     </head>
     <body>
         <h1>Novo Cliente</h1>
-        <form>
-            
+        <form action="/clientes" method="post" id="form">
+            <input type="text" id="nome_completo">
+            <input type="text" id="nome_mae">
+            <input type="text" id="cpf">
+            <input type="date" id="data_nascimento">
+            <input type="text" id="endereco">
+            <button type="submit">Enviar</button>
         </form>
+        
+        <p id="log"></p> 
     </body>
 </html>
