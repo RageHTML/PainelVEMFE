@@ -19,7 +19,7 @@ async function obterFormulario(event) {
         endereco: endereco
     }
 
-    const resposta = await fetch("/clientes", {
+    const resposta = await fetch("/clientes/registrar/", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(dadosClientes)
