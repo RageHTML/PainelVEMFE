@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PainelVF{% endblock %}</title>
+    
+    <link rel="stylesheet" href="/static/shared/style_navbar.css">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <div id="toast-container"></div>
+
+    <aside id="sidebar" class="sidebar">
+        <button id="toggle-btn" class="toggle-btn" aria-label="Menu">
+            &#8226;&#8226;&#8226;
+        </button>
+
+        <nav class="nav-menu">
+            <a href="/clientes" class="nav-link {% if active_page == 'clientes' %}active{% endif %}">
+                <span class="icon">👤</span>
+                <span class="text">Clientes</span>
+            </a>
+            <a href="/produtos" class="nav-link {% if active_page == 'produtos' %}active{% endif %}">
+                <span class="icon">📦</span>
+                <span class="text">Produtos</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <script src="/static/shared/script_navbar.js" defer></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

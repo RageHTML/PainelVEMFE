@@ -1,0 +1,123 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background-color: #f0f8ff;
+    color: #2c3e50;
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar Recolhível (Nav Rail) */
+.sidebar {
+    width: 240px;
+    background-color: #ffffff;
+    border-right: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 12px;
+    transition: width 0.3s ease;
+}
+
+.sidebar.collapsed {
+    width: 70px;
+}
+
+.toggle-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    align-self: flex-start;
+    padding: 8px 12px;
+    color: #5b7083;
+}
+
+.nav-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 24px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    text-decoration: none;
+    color: #5b7083;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background-color: #e0f2fe;
+    color: #0284c7;
+}
+
+.sidebar.collapsed .text {
+    display: none;
+}
+
+.main-content {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    min-width: 250px;
+    padding: 14px 20px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    animation: slideIn 0.3s ease-in-out;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.toast.sucesso {
+    background-color: #10b981; /* Verde */
+}
+
+.toast.erro {
+    background-color: #ef4444; /* Vermelho */
+}
+
+.toast.esconder {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

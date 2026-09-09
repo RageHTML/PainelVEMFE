@@ -1,0 +1,76 @@
+#form {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 100%;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+
+    /* Layout Inline */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 200px;
+}
+
+label {
+    font-size: 1rem;            /* Fonte maior para leitura facilitada */
+    font-weight: 700;          /* Negrito de alto contraste */
+    margin-bottom: 8px;
+    color: #0f172a;            /* Preto intenso para máximo contraste */
+}
+
+/* Estilo Flat Filled com Acessibilidade para Miopia */
+input[type="text"],
+input[type="date"] {
+    width: 100%;
+    padding: 14px 16px;         /* Área interna ampla */
+    border: 2px solid transparent;
+    border-radius: 8px;
+    background-color: #e2e8f0;  /* Preenchimento suave de contraste visível */
+    color: #0f172a;             /* Texto digitado em preto de alto contraste */
+    font-size: 1.05rem;         /* Letras maiores ao digitar */
+    font-weight: 600;
+    box-sizing: border-box;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Foco de Alta Visibilidade */
+input[type="text"]:focus,
+input[type="date"]:focus {
+    outline: 3px solid #0284c7;  /* Borda espessa e bem visível no foco */
+    outline-offset: 2px;
+    background-color: #ffffff;
+    border-color: #0284c7;
+}
+
+/* Botão de Alto Contraste */
+button[type="submit"] {
+    padding: 14px 28px;
+    height: 52px;              /* Botão mais alto e fácil de clicar/encontrar */
+    border: none;
+    border-radius: 8px;
+    background-color: #0284c7;
+    color: #ffffff;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #0369a1;
+}
+
+button[type="submit"]:focus {
+    outline: 3px solid #0f172a;
+    outline-offset: 2px;
+}

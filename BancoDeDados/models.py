@@ -31,26 +31,23 @@ class Produto(SQLModel, table=True):
 
 def salvar_cliente_banco(cliente: Cliente):
     with Session(engine) as session:
-      session.add(cliente)
-      session.commit()
-      session.refresh(cliente)
-      return cliente
+        session.add(cliente)
+        session.commit()
+        session.refresh(cliente)
+        return cliente
+
+
+def buscar_cliente_banco(nome: str):
+    with Session(engine) as session:
+        statement = select(Cliente).where(Cliente.nome.contains(nome))
+        resultados = session.exec(statement).all()
+        return resultados
+
 
 def salvar_produto_banco(produto: Produto):
     with Session(engine) as session:
-      session.add(produto)
-      session.commit()
-      session.refresh(produto)
-      return produto
-    
-    
-def buscar_cliente_banco(nome: str):
-    with Session(engine) as session:
-        statement = (
-            select(Cliente)
-            .where(Cliente.nome_completo.ilike(f"%{nome}%"))
-            .limit(5)
-        )
-        return session.exec(statement).all() 
-
+        session.add(produto)
+        session.commit()
+        session.refresh(produto)
+        return produto
 
