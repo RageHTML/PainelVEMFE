@@ -19,9 +19,13 @@ titulo = ParagraphStyle(
     'EstiloTitulo', parent=styles['Title'], alignment=TA_CENTER
 )
 
-dic_t = {
+dic_s = {
     '1': paragrafo,
     '2': titulo,
+}
+
+dic_c = {
+   '1': 'CLÁUSULA 1ª – DO OBJETO'
 }
 
 
@@ -38,6 +42,9 @@ def novo_paragrafo(texto, style):
 
   p.drawOn(pdf, x, y)
 
+def c1(titulo, texto):
+    novo_paragrafo(titulo, dic_s['2'])
+    novo_paragrafo(texto, dic_s['1'])
 
 def gerar_contrato():
   novo_paragrafo(
@@ -48,7 +55,7 @@ def gerar_contrato():
       'E de outro lado o contratante, doravante denominado contratante,'
       ' celebram o presente contrato de prestação de serviços tecnológicos,'
       ' que se regirá pelas cláusulas e condições seguintes.',
-      dic_t['1'],
+      dic_s['1'],
   )
 
 
