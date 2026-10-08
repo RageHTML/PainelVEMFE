@@ -30,7 +30,8 @@ dic_s = {
 }
 
 dic_c = {
-   '1': 'CLÁUSULA 1ª – DO OBJETO'
+   '1': 'CLÁUSULA 1ª – DO OBJETO',
+   '2': 'CLÁUSULA 2ª – DATA E PRAZO'
 }
 
 texto = "1Bola 2Balo 3mesa 4Mesa"
