@@ -11,11 +11,20 @@ def extenso(valor):
     return t
 
 pdf = canvas.Canvas('contrato.pdf', pagesize=A4, verbosity=0)
-
+styles = getSampleStyleSheet()
 x = 40
 y = 800
 
-styles = getSampleStyleSheet()
+
+texto = "1Bola 2Balo 3mesa 4Mesa"
+texto_split = texto.split()
+
+responsabilidades = [
+    "Zelar pelos itens recebidos;",
+    "Não molhar, sujar excessivamente ou expor ao sol;",
+    "Não modificar a estrutura da decoração;",
+    "Restituir os itens nas mesmas condições recebidas.",
+]
 
 paragrafo = ParagraphStyle(
     'EstiloCorpo', parent=styles['Normal'], fontSize=12, alignment=TA_LEFT
@@ -45,8 +54,6 @@ dic_c = {
    '7': 'CLÁUSULA 7ª – FORO'
 }
 
-texto = "1Bola 2Balo 3mesa 4Mesa"
-texto_split = texto.split()
 
 
 def novo_paragrafo(texto, style):
@@ -83,8 +90,17 @@ def c3(titulo, valor, forma_de_pagamento, estado):
       return None
    else:
       novo_paragrafo(titulo, dic_s['2'])
-      novo_paragrafo(f"O valor total do contrato é de R${valor} ({}), pago via {forma_de_pagamento} {estado}.",dic_s['1'])
+      novo_paragrafo(f"O valor total do contrato é de R${valor} ({extenso(valor)}), pago via {forma_de_pagamento} {estado}.",dic_s['1'])
 
+def c4(titulo, responsabilidade):
+   novo_paragrafo(titulo,dic_s['2'])
+   novo_paragrafo("Em caso de dano, perda ou quebra dos itens, o CONTRATANTE arcará com o valor de reposição. Para isso, compromete-se a:", dic_s['1'])
+   if responsabilidade:
+      for r in responsabilidade:
+         novo_paragrafo(r,dic_s['3'])
+   else:
+      return None
+   
 def gerar_contrato():
   novo_paragrafo(
     'Pelo presente instrumento particular, de um lado Vemfestejarjp,'
@@ -111,7 +127,14 @@ def gerar_contrato():
 
   c3(
      dic_c['3'],
-     '540'
+     '540',
+     'Pix',
+     'Quitado'
+  )
+
+  c4(
+     dic_c['4'],
+     responsabilidades
   )
 
 
