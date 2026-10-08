@@ -4,6 +4,11 @@ from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.pdfgen import canvas
 from reportlab.platypus import Paragraph
 from datetime import datetime
+from num2words import num2words
+
+def extenso(valor):
+    t = num2words(int(valor), lang="pt_BR")
+    return t
 
 pdf = canvas.Canvas('contrato.pdf', pagesize=A4, verbosity=0)
 
@@ -78,7 +83,7 @@ def c3(titulo, valor, forma_de_pagamento, estado):
       return None
    else:
       novo_paragrafo(titulo, dic_s['2'])
-      novo_paragrafo(f"O valor total do contrato é de R${valor}, pago via {forma_de_pagamento} {estado}.",dic_s['1'])
+      novo_paragrafo(f"O valor total do contrato é de R${valor} ({}), pago via {forma_de_pagamento} {estado}.",dic_s['1'])
 
 def gerar_contrato():
   novo_paragrafo(
