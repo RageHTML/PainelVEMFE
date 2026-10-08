@@ -27,15 +27,15 @@ responsabilidades = [
 ]
 
 paragrafo = ParagraphStyle(
-    'EstiloCorpo', parent=styles['Normal'], fontSize=12, alignment=TA_LEFT
+    'EstiloCorpo', parent=styles['Normal'], fontSize=12, leading=18, alignment=TA_LEFT
 )
 
 titulo = ParagraphStyle(
-    'EstiloTitulo', parent=styles['Title'], fontSize=14, alignment=TA_LEFT
+    'EstiloTitulo', parent=styles['Title'], fontSize=14, leading=18, alignment=TA_LEFT
 )
 
 bullet = ParagraphStyle(
-    'EstiloBullet', parent=styles['Normal'], fontSize=12, alignment=TA_LEFT, bulletText='•'
+    'EstiloBullet', parent=styles['Normal'], fontSize=12, leading=18, alignment=TA_LEFT, bulletText='•'
 )
 
 dic_s = {
@@ -60,12 +60,12 @@ def novo_paragrafo(texto, style):
   global y
   p = Paragraph(texto, style)
 
-  x_max = 495
+  x_max = 515
   y_max = 800
 
   _, y_restante = p.wrapOn(pdf, x_max, y_max)
 
-  y -= y_restante + 10
+  y -= y_restante + 14
 
   p.drawOn(pdf, x, y)
 
