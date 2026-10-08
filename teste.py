@@ -32,7 +32,12 @@ dic_s = {
 
 dic_c = {
    '1': 'CLÁUSULA 1ª – DO OBJETO',
-   '2': 'CLÁUSULA 2ª – DATA E PRAZO'
+   '2': 'CLÁUSULA 2ª – DATA E PRAZO',
+   '3': 'CLÁUSULA 3ª – VALOR E PAGAMENTO',
+   '4': 'CLÁUSULA 4ª – RESPONSABILIDADES DA CONTRATAD(A)',
+   '5': 'CLÁUSULA 5ª – MULTAS ',
+   '6': 'CLÁUSULA 6ª – CANCELAMENTO',
+   '7': 'CLÁUSULA 7ª – FORO'
 }
 
 texto = "1Bola 2Balo 3mesa 4Mesa"
@@ -68,6 +73,13 @@ def c2(titulo, data, hora,local):
         novo_paragrafo(titulo, dic_s['2'])
         novo_paragrafo(f"O evento ocorrerá em {data}, às {hora}, no {local}, incluindo a montagem do cenário.",dic_s['1'])
 
+def c3(titulo, valor, forma_de_pagamento, estado):
+   if not valor or not forma_de_pagamento or not estado:
+      return None
+   else:
+      novo_paragrafo(titulo, dic_s['2'])
+      novo_paragrafo(f"O valor total do contrato é de R${valor}, pago via {forma_de_pagamento} {estado}.",dic_s['1'])
+
 def gerar_contrato():
   novo_paragrafo(
     'Pelo presente instrumento particular, de um lado Vemfestejarjp,'
@@ -90,6 +102,11 @@ def gerar_contrato():
      '10/12/2026',
      '16:00',
      'Rua Lucas Borges da Silva, 431'
+  )
+
+  c3(
+     dic_c['3'],
+     '540'
   )
 
 
