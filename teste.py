@@ -1,4 +1,4 @@
-from reportlab.lib.enums import TA_CENTER
+from reportlab.lib.enums import TA_CENTER, TA_LEFT
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.pdfgen import canvas
@@ -12,21 +12,29 @@ y = 800
 styles = getSampleStyleSheet()
 
 paragrafo = ParagraphStyle(
-    'EstiloCorpo', parent=styles['Normal'], alignment=TA_CENTER
+    'EstiloCorpo', parent=styles['Normal'], alignment=TA_LEFT
 )
 
 titulo = ParagraphStyle(
-    'EstiloTitulo', parent=styles['Title'], alignment=TA_CENTER
+    'EstiloTitulo', parent=styles['Title'], fontSize=14, alignment=TA_LEFT
+)
+
+bullet = ParagraphStyle(
+    'EstiloBullet', parent=styles['Normal'], fontSize=12, alignment=TA_LEFT, bulletText='•'
 )
 
 dic_s = {
     '1': paragrafo,
     '2': titulo,
+    '3': bullet
 }
 
 dic_c = {
    '1': 'CLÁUSULA 1ª – DO OBJETO'
 }
+
+texto = "1Bola 2Balo 3mesa 4Mesa"
+texto_split = texto.split()
 
 
 def novo_paragrafo(texto, style):
@@ -42,9 +50,14 @@ def novo_paragrafo(texto, style):
 
   p.drawOn(pdf, x, y)
 
-def c1(titulo, texto):
+def c1(titulo, items):
     novo_paragrafo(titulo, dic_s['2'])
-    novo_paragrafo(texto, dic_s['1'])
+
+    if items:
+        for i in items:
+            novo_paragrafo(i, dic_s['3'])
+    else:
+       return None
 
 def gerar_contrato():
   novo_paragrafo(
@@ -57,6 +70,11 @@ def gerar_contrato():
       ' que se regirá pelas cláusulas e condições seguintes.',
       dic_s['1'],
   )
+
+  c1(
+      dic_c['1'],
+      texto_split
+    )
 
 
 
