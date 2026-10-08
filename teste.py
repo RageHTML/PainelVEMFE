@@ -3,6 +3,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.pdfgen import canvas
 from reportlab.platypus import Paragraph
+from datetime import datetime
 
 pdf = canvas.Canvas('contrato.pdf', pagesize=A4, verbosity=0)
 
@@ -12,7 +13,7 @@ y = 800
 styles = getSampleStyleSheet()
 
 paragrafo = ParagraphStyle(
-    'EstiloCorpo', parent=styles['Normal'], alignment=TA_LEFT
+    'EstiloCorpo', parent=styles['Normal'], fontSize=12, alignment=TA_LEFT
 )
 
 titulo = ParagraphStyle(
@@ -60,15 +61,22 @@ def c1(titulo, items):
     else:
        return None
 
+def c2(titulo, data, hora,local):
+    if not data or not hora or not local:
+       return None
+    else:
+        novo_paragrafo(titulo, dic_s['2'])
+        novo_paragrafo(f"O evento ocorrerá em {data}, às {hora}, no {local}, incluindo a montagem do cenário.",dic_s['1'])
+
 def gerar_contrato():
   novo_paragrafo(
-      'Pelo presente instrumento particular, de um lado Vemfestejarjp,'
-      ' inscrita no CNPJ nº 34.126.562/0001-06, com sede em Av: Henrique'
-      ' Ruffo, 223 jardim treze de maio, João Pessoa PB, doravante'
-      ' denominada contratada.'
-      'E de outro lado o contratante, doravante denominado contratante,'
-      ' celebram o presente contrato de prestação de serviços tecnológicos,'
-      ' que se regirá pelas cláusulas e condições seguintes.',
+    'Pelo presente instrumento particular, de um lado Vemfestejarjp,'
+    ' inscrita no CNPJ nº 34.126.562/0001-06, com sede na Av. Henrique'
+    ' Ruffo, nº 223, Jardim Treze de Maio, João Pessoa/PB, doravante'
+    ' denominada CONTRATADA,'
+    ' e, de outro lado, o CONTRATANTE, doravante denominado CONTRATANTE,'
+    ' celebram o presente contrato de prestação de serviços tecnológicos,'
+    ' que se regerá pelas cláusulas e condições seguintes.',
       dic_s['1'],
   )
 
@@ -76,6 +84,13 @@ def gerar_contrato():
       dic_c['1'],
       texto_split
     )
+
+  c2(
+     dic_c['2'],
+     '10/12/2026',
+     '16:00',
+     'Rua Lucas Borges da Silva, 431'
+  )
 
 
 
