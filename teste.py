@@ -1,14 +1,16 @@
+from datetime import datetime
+from num2words import num2words
 from reportlab.lib.enums import TA_CENTER, TA_LEFT
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.pdfgen import canvas
 from reportlab.platypus import Paragraph
-from datetime import datetime
-from num2words import num2words
+
 
 def extenso(valor):
-    t = num2words(int(valor), lang="pt_BR")
-    return t
+  t = num2words(int(valor), lang='pt_BR')
+  return t
+
 
 pdf = canvas.Canvas('contrato.pdf', pagesize=A4, verbosity=0)
 styles = getSampleStyleSheet()
@@ -16,16 +18,30 @@ x = 40
 y = 800
 
 
-texto = "1Bola 2Balo 3mesa 4Mesa"
+items_intro = (
+    'O presente contrato tem como objeto a locação dos bens e materiais'
+    ' decorativos descritos a seguir, que serão disponibilizados para o evento:'
+)
+texto = '1Bola 2Balo 3mesa 4Mesa'
 texto_split = texto.split()
 
-multa = "O(A) CONTRATANTE declara-se fiel depositário(a) dos bens locados e assume integral responsabilidade pela sua conservação durante todo o período da locação. Em caso de avaria, perda, roubo, destruição parcial ou total dos itens, o(a) CONTRATANTE compromete-se a indenizar a CONTRATADA no valor de reposição de cada material danificado. Para a devida preservação do acervo, o(a) CONTRATANTE compromete-se a:"
+multa = (
+    'O(A) <b>CONTRATANTE</b> declara-se fiel depositário(a) dos bens locados e'
+    ' assume integral responsabilidade pela sua conservação durante todo o'
+    ' período da locação. Em caso de avaria, perda, roubo, destruição parcial'
+    ' ou total dos itens, o(a) <b>CONTRATANTE</b> compromete-se a indenizar a'
+    ' <b>CONTRATADA</b> no valor de reposição de cada material danificado. Para'
+    ' a devida preservação do acervo, o(a) <b>CONTRATANTE</b> compromete-se a:'
+)
 
 responsabilidades = [
-    "Zelar pela integridade dos itens recebidos;",
-    "Não molhar, sujar excessivamente ou expor as peças ao sol e intempéries;",
-    "Não alterar, personalizar ou modificar a estrutura da decoração;",
-    "Restituir todos os itens no término do evento nas mesmas condições em que foram"
+    'Zelar pela integridade dos itens recebidos;',
+    'Não molhar, sujar excessivamente ou expor as peças ao sol e intempéries;',
+    'Não alterar, personalizar ou modificar a estrutura da decoração;',
+    (
+        'Restituir todos os itens no término do evento nas mesmas condições em'
+        ' que foram'
+    ),
 ]
 
 paragrafo = ParagraphStyle(
@@ -40,21 +56,16 @@ bullet = ParagraphStyle(
     'EstiloBullet', parent=styles['Normal'], fontSize=12, leading=18, alignment=TA_LEFT, bulletText='•'
 )
 
-dic_s = {
-    '1': paragrafo,
-    '2': titulo,
-    '3': bullet
-}
+dic_s = {'1': paragrafo, '2': titulo, '3': bullet}
 
 dic_c = {
-   '1': 'CLÁUSULA 1ª – DO OBJETO',
-   '2': 'CLÁUSULA 2ª – DATA E PRAZO',
-   '3': 'CLÁUSULA 3ª – VALOR E PAGAMENTO',
-   '4': 'CLÁUSULA 4ª – DAS RESPONSABILIDADES E INDENIZAÇÕES',
-   '5': 'CLÁUSULA 6ª – CANCELAMENTO',
-   '6': 'CLÁUSULA 7ª – FORO'
+    '1': 'CLÁUSULA 1ª – DO OBJETO',
+    '2': 'CLÁUSULA 2ª – DATA E PRAZO',
+    '3': 'CLÁUSULA 3ª – VALOR E PAGAMENTO',
+    '4': 'CLÁUSULA 4ª – DAS RESPONSABILIDADES E INDENIZAÇÕES',
+    '5': 'CLÁUSULA 6ª – CANCELAMENTO',
+    '6': 'CLÁUSULA 7ª – FORO',
 }
-
 
 
 def novo_paragrafo(texto, style):
@@ -70,76 +81,85 @@ def novo_paragrafo(texto, style):
 
   p.drawOn(pdf, x, y)
 
-def c1(titulo, items):
-    novo_paragrafo(titulo, dic_s['2'])
 
-    if items:
-        for i in items:
-            novo_paragrafo(i, dic_s['3'])
-    else:
-       return None
-
-def c2(titulo, data, hora,local):
-    if not data or not hora or not local:
-       return None
-    else:
-        novo_paragrafo(titulo, dic_s['2'])
-        novo_paragrafo(f"O evento objeto deste contrato será realizado na data de {data}, às {hora}, no endereço {local}, englobando a montagem do cenário e a prestação dos serviços.", dic_s['1'])
-
-def c3(titulo, valor, forma_de_pagamento, estado):
-   if not valor or not forma_de_pagamento or not estado:
-      return None
-   else:
-      novo_paragrafo(titulo, dic_s['2'])
-      novo_paragrafo(f"O valor total ajustado para o presente contrato é de R${valor}({extenso(valor)}), a ser adimplido através de {forma_de_pagamento}, constando atualmente como {estado}.",
-                     dic_s['1'],)
-
-def c4(titulo, responsabilidade):
-   novo_paragrafo(titulo,dic_s['2'])
-   novo_paragrafo(multa, dic_s['1'])
-   if responsabilidade:
-      for r in responsabilidade:
-         novo_paragrafo(r,dic_s['3'])
-   else:
-      return None
-   
-def gerar_contrato():
+def intro(cliente, codigo, endereco):
   novo_paragrafo(
-    'Pelo presente instrumento particular, de um lado Vemfestejarjp,'
-    ' inscrita no CNPJ nº 34.126.562/0001-06, com sede na Av. Henrique'
-    ' Ruffo, nº 223, Jardim Treze de Maio, João Pessoa/PB, doravante'
-    ' denominada CONTRATADA,'
-    ' e, de outro lado, o CONTRATANTE, doravante denominado CONTRATANTE,'
-    ' celebram o presente contrato de prestação de serviços tecnológicos,'
-    ' que se regerá pelas cláusulas e condições seguintes.',
-      dic_s['1'],
+      f"Pelo presente instrumento particular, de um lado, <b>VEM FESTEJAR"
+      f" JP</b>, inscrita no CNPJ sob o nº 34.126.562/0001-06, com sede na Av."
+      f" Henrique Ruffo, nº 223, Jardim Treze de Maio, João Pessoa/PB, doravante"
+      f" denominada <b>CONTRATADA</b>, e, de outro lado, <b>{cliente}</b>,"
+      f" inscrito(a) no CPF/CNPJ sob o nº <b>{codigo}</b>, residente e"
+      f" domiciliado(a) na <b>{endereco}</b>, doravante denominado(a)"
+      f" <b>CONTRATANTE</b>, têm entre si justo e contratado o presente"
+      f" instrumento de prestação de serviços e locação de bens móveis, que se"
+      f" regerá pelas cláusulas e condições a seguir expostas.",
+      dic_s["1"],
   )
 
-  c1(
-      dic_c['1'],
-      texto_split
+
+def c1(titulo, items):
+  novo_paragrafo(f"<b>{titulo}</b>", dic_s["2"])
+
+  novo_paragrafo(items_intro, dic_s["1"])
+
+  if items:
+    for i in items:
+      novo_paragrafo(i, dic_s["3"])
+  else:
+    return None
+
+
+def c2(titulo, data, hora, local):
+  if not data or not hora or not local:
+    return None
+  else:
+    novo_paragrafo(f"<b>{titulo}</b>", dic_s["2"])
+    novo_paragrafo(
+        f"O evento objeto deste contrato será realizado na data de"
+        f" <b>{data}</b>, às <b>{hora}</b>, no endereço <b>{local}</b>,"
+        f" englobando a montagem do cenário e a prestação dos serviços.",
+        dic_s["1"],
     )
 
-  c2(
-     dic_c['2'],
-     '10/12/2026',
-     '16:00',
-     'Rua Lucas Borges da Silva, 431'
+
+def c3(titulo, valor, forma_de_pagamento, estado):
+  if not valor or not forma_de_pagamento or not estado:
+    return None
+  else:
+    novo_paragrafo(f"<b>{titulo}</b>", dic_s["2"])
+    novo_paragrafo(
+        f"O valor total ajustado para o presente contrato é de <b>R${valor}"
+        f" ({extenso(valor)})</b>, a ser adimplido através de"
+        f" <b>{forma_de_pagamento}</b>, constando atualmente como"
+        f" <b>{estado}</b>.",
+        dic_s["1"],
+    )
+
+
+def c4(titulo, responsabilidade):
+  novo_paragrafo(f"<b>{titulo}</b>", dic_s["2"])
+  novo_paragrafo(multa, dic_s["1"])
+  if responsabilidade:
+    for r in responsabilidade:
+      novo_paragrafo(r, dic_s["3"])
+  else:
+    return None
+
+
+def gerar_contrato():
+  intro(
+      "Maria Lucia da Silva",
+      "833.740.478-74",
+      "Rua Francisca Pereira Nóbrega, 664",
   )
 
-  c3(
-     dic_c['3'],
-     '540',
-     'Pix',
-     'Quitado'
-  )
+  c1(dic_c["1"], texto_split)
 
-  c4(
-     dic_c['4'],
-     responsabilidades
-  )
+  c2(dic_c["2"], "10/12/2026", "16:00", "Rua Lucas Borges da Silva, 431")
 
+  c3(dic_c["3"], "540", "Pix", "Quitado")
 
+  c4(dic_c["4"], responsabilidades)
 
 
 gerar_contrato()
