@@ -91,7 +91,8 @@ def c3(titulo, valor, forma_de_pagamento, estado):
       return None
    else:
       novo_paragrafo(titulo, dic_s['2'])
-      novo_paragrafo(f"O valor total do contrato é de R${valor} ({extenso(valor)}), pago via {forma_de_pagamento} {estado}.",dic_s['1'])
+      novo_paragrafo(f"O valor total ajustado para o presente contrato é de R${valor}({extenso(valor)}), a ser adimplido através de {forma_de_pagamento}, constando atualmente como {estado}.",
+                     dic_s['1'],)
 
 def c4(titulo, responsabilidade):
    novo_paragrafo(titulo,dic_s['2'])
