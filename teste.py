@@ -84,7 +84,7 @@ def c2(titulo, data, hora,local):
        return None
     else:
         novo_paragrafo(titulo, dic_s['2'])
-        novo_paragrafo(f"O evento ocorrerá em {data}, às {hora}, no {local}, incluindo a montagem do cenário.",dic_s['1'])
+        novo_paragrafo(f"O evento objeto deste contrato será realizado na data de {data}, às {hora}, no endereço {local}, englobando a montagem do cenário e a prestação dos serviços.", dic_s['1'])
 
 def c3(titulo, valor, forma_de_pagamento, estado):
    if not valor or not forma_de_pagamento or not estado:
