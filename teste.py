@@ -19,11 +19,13 @@ y = 800
 texto = "1Bola 2Balo 3mesa 4Mesa"
 texto_split = texto.split()
 
+multa = "O(A) CONTRATANTE declara-se fiel depositário(a) dos bens locados e assume integral responsabilidade pela sua conservação durante todo o período da locação. Em caso de avaria, perda, roubo, destruição parcial ou total dos itens, o(a) CONTRATANTE compromete-se a indenizar a CONTRATADA no valor de reposição de cada material danificado. Para a devida preservação do acervo, o(a) CONTRATANTE compromete-se a:"
+
 responsabilidades = [
-    "Zelar pelos itens recebidos;",
-    "Não molhar, sujar excessivamente ou expor ao sol;",
-    "Não modificar a estrutura da decoração;",
-    "Restituir os itens nas mesmas condições recebidas.",
+    "Zelar pela integridade dos itens recebidos;",
+    "Não molhar, sujar excessivamente ou expor as peças ao sol e intempéries;",
+    "Não alterar, personalizar ou modificar a estrutura da decoração;",
+    "Restituir todos os itens no término do evento nas mesmas condições em que foram"
 ]
 
 paragrafo = ParagraphStyle(
@@ -48,10 +50,9 @@ dic_c = {
    '1': 'CLÁUSULA 1ª – DO OBJETO',
    '2': 'CLÁUSULA 2ª – DATA E PRAZO',
    '3': 'CLÁUSULA 3ª – VALOR E PAGAMENTO',
-   '4': 'CLÁUSULA 4ª – RESPONSABILIDADES DA CONTRATAD(A)',
-   '5': 'CLÁUSULA 5ª – MULTAS ',
-   '6': 'CLÁUSULA 6ª – CANCELAMENTO',
-   '7': 'CLÁUSULA 7ª – FORO'
+   '4': 'CLÁUSULA 4ª – DAS RESPONSABILIDADES E INDENIZAÇÕES',
+   '5': 'CLÁUSULA 6ª – CANCELAMENTO',
+   '6': 'CLÁUSULA 7ª – FORO'
 }
 
 
@@ -94,7 +95,7 @@ def c3(titulo, valor, forma_de_pagamento, estado):
 
 def c4(titulo, responsabilidade):
    novo_paragrafo(titulo,dic_s['2'])
-   novo_paragrafo("Em caso de dano, perda ou quebra dos itens, o CONTRATANTE arcará com o valor de reposição. Para isso, compromete-se a:", dic_s['1'])
+   novo_paragrafo(multa, dic_s['1'])
    if responsabilidade:
       for r in responsabilidade:
          novo_paragrafo(r,dic_s['3'])
@@ -136,6 +137,7 @@ def gerar_contrato():
      dic_c['4'],
      responsabilidades
   )
+
 
 
 
