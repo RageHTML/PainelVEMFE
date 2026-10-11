@@ -44,6 +44,7 @@ responsabilidades = [
     ),
 ]
 
+
 paragrafo = ParagraphStyle(
     'EstiloCorpo', parent=styles['Normal'], fontSize=12, leading=18, alignment=TA_LEFT
 )
@@ -63,8 +64,8 @@ dic_c = {
     '2': 'CLÁUSULA 2ª – DATA E PRAZO',
     '3': 'CLÁUSULA 3ª – VALOR E PAGAMENTO',
     '4': 'CLÁUSULA 4ª – DAS RESPONSABILIDADES E INDENIZAÇÕES',
-    '5': 'CLÁUSULA 6ª – CANCELAMENTO',
-    '6': 'CLÁUSULA 7ª – FORO',
+    '5': 'CLÁUSULA 5ª – CANCELAMENTO',
+    '6': 'CLÁUSULA 6ª – FORO',
 }
 
 
@@ -77,8 +78,12 @@ def novo_paragrafo(texto, style):
 
   _, y_restante = p.wrapOn(pdf, x_max, y_max)
 
-  y -= y_restante + 14
+  # Verifica se o texto vai ultrapassar a margem inferior (ex: 80px do rodapé)
+  if y - y_restante < 80:
+    pdf.showPage()  # Cria uma nova página no PDF
+    y = 800  # Reseta a posição vertical Y para o topo da nova página
 
+  y -= y_restante + 14
   p.drawOn(pdf, x, y)
 
 
@@ -145,6 +150,19 @@ def c4(titulo, responsabilidade):
   else:
     return None
 
+def c5(titulo, tempo, porcentagem):
+  novo_paragrafo(f"<b>{titulo}</b>", dic_s["2"])
+  novo_paragrafo(
+      f"Em caso de solicitação de cancelamento pelo(a) <b>CONTRATANTE</b>"
+      f" informada com antecedência mínima de <b>{tempo} ({extenso(tempo)})"
+      f" dias</b> da data do evento, haverá a restituição de"
+      f" <b>{porcentagem}% ({extenso(porcentagem)} por cento)</b> do valor pago."
+      f" Decorrido este prazo, o contrato será considerado rescindido sem"
+      f" direito a reembolso de qualquer quantia.",
+      dic_s["1"],
+  )
+   
+
 
 def gerar_contrato():
   intro(
@@ -160,6 +178,8 @@ def gerar_contrato():
   c3(dic_c["3"], "540", "Pix", "Quitado")
 
   c4(dic_c["4"], responsabilidades)
+
+  c5(dic_c["5"], "07","30")
 
 
 gerar_contrato()
