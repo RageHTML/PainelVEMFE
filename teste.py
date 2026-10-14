@@ -11,6 +11,33 @@ def extenso(valor):
   t = num2words(int(valor), lang='pt_BR')
   return t
 
+from datetime import datetime
+
+def data_por_extenso(dt=None):
+    if dt is None:
+        dt = datetime.now()
+        
+    meses = {
+        1: "janeiro", 
+        2: "fevereiro", 
+        3: "março", 
+        4: "abril",
+        5: "maio", 
+        6: "junho", 
+        7: "julho", 
+        8: "agosto",
+        9: "setembro", 
+        10: "outubro", 
+        11: "novembro", 
+        12: "dezembro"
+    }
+    
+    dia = str(dt.day).zfill(2)
+    mes = meses[dt.month]
+    ano = dt.year
+    
+    return f"{dia} de {mes} de {ano}"
+
 
 pdf = canvas.Canvas('contrato.pdf', pagesize=A4, verbosity=0)
 styles = getSampleStyleSheet()
@@ -78,10 +105,9 @@ def novo_paragrafo(texto, style):
 
   _, y_restante = p.wrapOn(pdf, x_max, y_max)
 
-  # Verifica se o texto vai ultrapassar a margem inferior (ex: 80px do rodapé)
   if y - y_restante < 80:
-    pdf.showPage()  # Cria uma nova página no PDF
-    y = 800  # Reseta a posição vertical Y para o topo da nova página
+    pdf.showPage()  
+    y = 800 
 
   y -= y_restante + 14
   p.drawOn(pdf, x, y)
@@ -161,6 +187,24 @@ def c5(titulo, tempo, porcentagem):
       f" direito a reembolso de qualquer quantia.",
       dic_s["1"],
   )
+
+def c6(titulo):
+  data_contrato = data_por_extenso()
+  novo_paragrafo(f"<b>{titulo}</b>", dic_s["2"])
+  novo_paragrafo(
+      "Fica eleito o Foro da Comarca de <b>João Pessoa/PB</b>, com renúncia"
+      " expressa de qualquer outro, por mais privilegiado que seja, para"
+      " dirimir quaisquer dúvidas, controvérsias ou litígios oriundos do"
+      " presente contrato.",
+      dic_s["1"],
+  )
+  novo_paragrafo(
+      "E, por estarem assim justos e contratados, assinam o presente"
+      " instrumento em 02 (duas) vias de igual teor e forma, para um só"
+      " efeito legal.",
+      dic_s["1"],
+  )
+  novo_paragrafo(f"<b>João Pessoa/PB, {data_contrato}.</b>", dic_s["1"])
    
 
 
@@ -180,6 +224,8 @@ def gerar_contrato():
   c4(dic_c["4"], responsabilidades)
 
   c5(dic_c["5"], "07","30")
+
+  c6(dic_c["6"])
 
 
 gerar_contrato()
