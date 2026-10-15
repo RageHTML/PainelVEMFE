@@ -13,8 +13,16 @@ from BancoDeDados.models import (
 router = APIRouter()
 templates = Jinja2Templates(directory="InterfaceWeb")
 
+@router.get("/contrato", response_class=HTMLResponse)
+def exibir_pagina_contrato(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="pages/contratos/index.html",
+        status_code=200
+    )
+    
 @router.get("/clientes", response_class=HTMLResponse)
-async def pagina_clientes(request: Request):
+def pagina_clientes(request: Request):
     return templates.TemplateResponse(
         request=request,
         name="pages/clientes/index.html",

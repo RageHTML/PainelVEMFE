@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <title>Gerar Contratos</title>
+    </head>
+    <body>
+        <form action="/contrato" method="post" id="contrato_form">
+            <h1>Dados Contratante</h1>
+            <label for="nome_contratente">Nome Completo</label>
+            <input type="texto" id="nome_contratante" name="nome_contratante">
+
+            <label for="cpf_contratente">CPF ou CNPJ</label>
+            <input type="texto" id="cpf_contratante" name="cpf_contratante">
+
+            <label for="endereco_contratente">Endereço</label>
+            <input type="texto" id="endereco_contratante" name="endereco_contratente">
+
+            <h1>Informacao do pedido</h1>
+            <label for="local">Endereço do evento</label>
+            <input type="texto" id="local" name="local">
+
+            <label for="data">Data do evento</label>
+            <input type="date" id="data" name="data">
+
+            <label for="hora">Hora do evento</label>
+            <input type="time" id="hora" name="hora">
+
+            <label for="objetos">Items inclusos:</label>
+            <textarea id="objetos" name="objetos" rows="10" cols="50" placeholder="Escreva os detalhes do produto..."></textarea>
+
+            <h1>Forma de Pagamento e Valor</h1>
+        </form>
+    </body>
+</html>

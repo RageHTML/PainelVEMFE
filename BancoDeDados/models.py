@@ -36,7 +36,6 @@ def salvar_cliente_banco(cliente: Cliente):
         session.refresh(cliente)
         return cliente
 
-
 def buscar_cliente_banco(nome: str):
     with Session(engine) as session:
         statement = select(Cliente).where(Cliente.nome.contains(nome))
