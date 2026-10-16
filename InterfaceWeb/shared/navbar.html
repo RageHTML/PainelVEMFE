@@ -9,7 +9,6 @@
     {%block extra_css%}{%endblock%}
 </head>
 <body>
-
     <div id="toast-container"></div>
 
     <aside id="sidebar" class="sidebar">
@@ -18,13 +17,18 @@
         </button>
 
         <nav class="nav-menu">
-            <a href="/clientes" class="nav-link {% if active_page == 'clientes' %}active{% endif %}">
+            <a href="/clientes" class="nav-link {% if pagina_atual == 'clientes' %}active{% endif %}">
                 <span class="icon">👤</span>
                 <span class="text">Clientes</span>
             </a>
-            <a href="/produtos" class="nav-link {% if active_page == 'produtos' %}active{% endif %}">
+            <a href="/produtos" class="nav-link {% if pagina_atual == 'produtos' %}active{% endif %}">
                 <span class="icon">📦</span>
                 <span class="text">Produtos</span>
+            </a>
+
+            <a href="/contratos" class="nav-link {% if pagina_atual == 'contratos' %}active{% endif %}">
+                <span class="icon">📝</span>
+                <span class="text">Gerar Contratos</span>
             </a>
         </nav>
     </aside>
