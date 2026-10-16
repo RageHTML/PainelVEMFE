@@ -70,17 +70,17 @@ async function obterFormulario(event) {
 
         if (!resposta.ok) {
             const erroJson = await resposta.json().catch(() => ({ detail: "Erro ao cadastrar produto." }));
-            exibirToast(erroJson.detail || "Erro ao cadastrar produto", "erro");
+            exibirNotificacao(erroJson.detail || "Erro ao cadastrar produto", "200", "error");
             return;
         }
 
-        exibirToast("Produto cadastrado com sucesso!", "sucesso");
+        exibirNotificacao("Produto cadastrado com sucesso!", "200", "sucesso");
         formulario.reset();
         if (inputIdOculto) inputIdOculto.value = "";
         if (dataList) dataList.innerHTML = "";
 
     } catch (erro) {
-        exibirToast("Erro de conexão com o servidor", "erro");
+        exibirNotificacao("Erro de conexão com o servidor", "400", "error");
     }
 }
 
