@@ -73,7 +73,7 @@ body {
     align-items: center;
 }
 
-#toast-container {
+#notificacao-container {
     position: fixed;
     top: 20px;
     right: 20px;
@@ -83,7 +83,7 @@ body {
     gap: 10px;
 }
 
-.toast {
+.notificacao {
     min-width: 250px;
     padding: 14px 20px;
     border-radius: 8px;
@@ -98,15 +98,15 @@ body {
     transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
-.toast.sucesso {
+.notificacao.sucesso {
     background-color: #10b981; /* Verde */
 }
 
-.toast.erro {
+.notificacao.error {
     background-color: #ef4444; /* Vermelho */
 }
 
-.toast.esconder {
+.notificacao.esconder {
     opacity: 0;
     transform: translateY(-20px);
 }

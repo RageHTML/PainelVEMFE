@@ -1,27 +1,5 @@
 const formulario = document.getElementById("form");
 
-function exibirToast(mensagem, tipo = "sucesso", tempo = 3000) {
-    let container = document.getElementById("toast-container");
-    if (!container) {
-        container = document.createElement("div");
-        container.id = "toast-container";
-        document.body.appendChild(container);
-    }
-
-    const toast = document.createElement("div");
-    toast.className = `toast ${tipo}`;
-    toast.textContent = mensagem;
-
-    container.appendChild(toast);
-
-    setTimeout(() => {
-        toast.classList.add("esconder");
-        setTimeout(() => {
-            toast.remove();
-        }, 400);
-    }, tempo);
-}
-
 async function obterFormulario(event) {
     event.preventDefault();
 
@@ -41,17 +19,17 @@ async function obterFormulario(event) {
         });
 
         if (!resposta.ok) {
-            const erroJson = await resposta.json().catch(() => ({ detail: "Erro desconhecido" }));
-            exibirToast(erroJson.detail || "Erro ao cadastrar cliente", "erro");
+            const erroJson = await resposta.json().catch(() => ({ menssagem: "Falha ao processar o json", codigo: "200",  tipo: "error"}));
+            exibirNotificacao(erroJson.menssagem, erroJson.codigo, errorJson.tipo);
             return;
         }
 
         const dados = await resposta.json();
-        exibirToast("Cliente cadastrado com sucesso!", "sucesso");
+        exibirNotificacao("Cliente cadastrado com sucesso!", "200", "sucesso");
         formulario.reset();
 
     } catch (erro) {
-        exibirToast("Erro de conexão com o servidor", "erro");
+        exibirNotificacao("Erro de conexão com o servidor", "400", "error");
     }
 }
 

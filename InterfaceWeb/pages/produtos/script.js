@@ -4,28 +4,6 @@ const dataList = document.getElementById("lista_clientes");
 const formulario = document.getElementById("form");
 let clientesEncontrados = [];
 
-function exibirToast(mensagem, tipo = "sucesso", tempo = 3000) {
-    let container = document.getElementById("toast-container");
-    if (!container) {
-        container = document.createElement("div");
-        container.id = "toast-container";
-        document.body.appendChild(container);
-    }
-
-    const toast = document.createElement("div");
-    toast.className = `toast ${tipo}`;
-    toast.textContent = mensagem;
-
-    container.appendChild(toast);
-
-    setTimeout(() => {
-        toast.classList.add("esconder");
-        setTimeout(() => {
-            toast.remove();
-        }, 400);
-    }, tempo);
-}
-
 if (inputNome) {
     inputNome.addEventListener("input", async (event) => {
         const texto = event.target.value.trim();
