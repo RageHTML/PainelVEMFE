@@ -1,21 +1,20 @@
 const formulario = document.getElementById("form");
 
+
+
 async function obterFormulario(event) {
     event.preventDefault();
 
-    const dadosClientes = {
-        nome_completo: document.getElementById("nome_completo").value,
-        nome_mae: document.getElementById("nome_mae").value,
-        cpf: document.getElementById("cpf").value,
-        data_nascimento: document.getElementById("data_nascimento").value || null,
-        endereco: document.getElementById("endereco").value
-    };
-
+    let form = new FormData(formulario)
+    let campos_iterator = form.entries()
+    let campos = Object.fromEntries(campos_iterator)
+    const campos_json = JSON.stringify(campos);
+    
     try {
-        const resposta = await fetch("/clientes/registrar", {
+        const resposta = await fetch("/clientes", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(dadosClientes)
+            body: campos_json
         });
 
         if (!resposta.ok) {

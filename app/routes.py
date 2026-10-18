@@ -31,6 +31,10 @@ def pagina_clientes(request: Request):
         status_code=200
     )
 
+@router.post("/clientes")
+async def criar_cliente(cliente: Cliente):
+    return salvar_cliente_banco(cliente)
+
 @router.get("/produtos", response_class=HTMLResponse)
 async def pagina_produtos(request: Request):
     return templates.TemplateResponse(
@@ -39,10 +43,6 @@ async def pagina_produtos(request: Request):
         context={"pagina_atual": "produtos"},
         status_code=200
     )
-
-@router.post("/clientes/registrar")
-async def criar_cliente(cliente: Cliente):
-    return salvar_cliente_banco(cliente)
 
 @router.get("/clientes/buscar")
 async def buscar_cliente(nome: str):
