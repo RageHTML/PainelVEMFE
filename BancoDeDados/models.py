@@ -4,6 +4,9 @@ from datetime import date
 from fastapi import Depends
 from dotenv_vault import load_dotenv
 from sqlmodel import Field, SQLModel, create_engine, Session, select
+from fastapi import Response
+from fastapi.responses import JSONResponse
+from fastapi.encoders import jsonable_encoder
 
 load_dotenv()
 
@@ -13,11 +16,10 @@ engine = create_engine(os.getenv("DATABASE_URL"), echo=True)
 class Cliente(SQLModel, table=True):
   id: int | None = Field(default=None, primary_key=True)
   nome_completo: str = Field()
-  nome_mae: str | None = Field()
+  nome_mae: str = Field()
   cpf: str = Field(unique=True)
   data_nascimento: date = Field()
-  endereco: str | None = Field()
-
+  endereco: str = Field()
 
 class Produto(SQLModel, table=True):
   id: int | None = Field(default=None, primary_key=True)
@@ -30,11 +32,21 @@ class Produto(SQLModel, table=True):
   data_entregue: date | None = Field()
 
 def salvar_cliente_banco(cliente: Cliente):
-    with Session(engine) as session:
-        session.add(cliente)
+    try:  
+      with Session(engine) as session:
+        db_cliente = cliente.model_validate(cliente)
+        session.add(db_cliente)
         session.commit()
-        session.refresh(cliente)
-        return cliente
+        session.refresh(db_cliente)
+        return db_cliente
+    except Exception as e:
+      erro = jsonable_encoder(str(e))
+      if "Input should be a valid date or datetime, input is too short" in erro:
+         return JSONResponse(content=erro, status_code =400)
+      
+
+     
+       
 
 def buscar_cliente_banco(nome: str):
     with Session(engine) as session:
