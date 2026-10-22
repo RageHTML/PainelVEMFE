@@ -1,12 +1,9 @@
 import os
 from typing import Annotated
 from datetime import date
-from fastapi import Depends
+from fastapi import Depends,Response, HTTPException
 from dotenv_vault import load_dotenv
 from sqlmodel import Field, SQLModel, create_engine, Session, select
-from fastapi import Response
-from fastapi.responses import JSONResponse
-from fastapi.encoders import jsonable_encoder
 
 load_dotenv()
 
@@ -40,14 +37,10 @@ def salvar_cliente_banco(cliente: Cliente):
         session.refresh(db_cliente)
         return db_cliente
     except Exception as e:
-      erro = jsonable_encoder(str(e))
-      if "Input should be a valid date or datetime, input is too short" in erro:
-         return JSONResponse(content=erro, status_code =400)
+        erro = str(e).replace("\n", "").strip()
+        if "validation error for Clientedata_nascimento" in erro: 
+          raise HTTPException(detail="Data de nascimento precisa ser preenchida", status_code =400)
       
-
-     
-       
-
 def buscar_cliente_banco(nome: str):
     with Session(engine) as session:
         statement = select(Cliente).where(Cliente.nome.contains(nome))

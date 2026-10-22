@@ -10,24 +10,23 @@ async function obterFormulario(event) {
     let campos_obj = JSON.parse(campos_json)
     let status_code = 0
 
-    try {
-        resposta = await fetch("/clientes", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: campos_json
-        });
+    resposta = await fetch("/clientes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: campos_json
+    });
 
-        status_code = resposta.status
+    const dados = await resposta.json();
+    status_code = resposta.status
+    console.log(dados)
 
-        const dados = await resposta.json();
+    if (resposta.ok == false){
+        exibirNotificacao(`${dados.detail}`, `${status_code}`, "error");
+    } else {
         exibirNotificacao("Cliente cadastrado com sucesso!", "200", "sucesso");
         formulario.reset();
-    } catch(e) {
-        console.log(resposta_json)
-        if (e instanceof Error){
-            exibirNotificacao(`${e.name} ${e.message}`, `${status_code}`, "error");
-        }
     }
+
 }
 
 if (formulario) {
