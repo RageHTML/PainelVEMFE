@@ -32,8 +32,8 @@ def pagina_clientes(request: Request):
     )
 
 @router.post("/clientes")
-async def criar_cliente(cliente: Cliente):
-    return salvar_cliente_banco(cliente)
+async def criar_cliente(request: Request, cliente: Cliente):
+    return await salvar_cliente_banco(request,cliente)
 
 @router.get("/produtos", response_class=HTMLResponse)
 async def pagina_produtos(request: Request):

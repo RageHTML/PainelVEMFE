@@ -1,7 +1,7 @@
 import os
 from typing import Annotated
 from datetime import date
-from fastapi import Depends,Response, HTTPException
+from fastapi import Depends,Response, HTTPException, Request
 from dotenv_vault import load_dotenv
 from sqlmodel import Field, SQLModel, create_engine, Session, select
 
@@ -28,7 +28,18 @@ class Produto(SQLModel, table=True):
   data_pedido: date = Field(default_factory=date.today)
   data_entregue: date | None = Field()
 
-def salvar_cliente_banco(cliente: Cliente):
+async def salvar_cliente_banco(request: Request, cliente: Cliente ):
+    json = await request.json()
+    nome_completo = json['nome_completo']
+    nome_mae = json['nome_mae']
+    endereco = json['endereco']
+
+    
+    if nome_completo == "" or nome_mae == "" or endereco == "":
+       raise HTTPException(detail="Nome completo esta vazio",status_code=400)
+    elif len(nome_completo) < 3:
+       raise HTTPException (detail="Minimo 3 caracteres para nome", status_code=400)
+
     try:  
       with Session(engine) as session:
         db_cliente = cliente.model_validate(cliente)
@@ -40,6 +51,8 @@ def salvar_cliente_banco(cliente: Cliente):
         erro = str(e).replace("\n", "").strip()
         if "validation error for Clientedata_nascimento" in erro: 
           raise HTTPException(detail="Data de nascimento precisa ser preenchida", status_code =400)
+        else:
+          raise HTTPException(detail=f"{erro}", status_code =400)
       
 def buscar_cliente_banco(nome: str):
     with Session(engine) as session:
