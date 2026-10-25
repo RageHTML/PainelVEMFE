@@ -51,10 +51,7 @@ async def salvar_cliente_banco(request: Request, cliente: Cliente ):
         return db_cliente
     except Exception as e:
         erro = str(e).replace("\n", "").strip()
-        if "validation error for Clientedata_nascimento" in erro: 
-          raise HTTPException(detail="Data de nascimento precisa ser preenchida", status_code =400)
-        else:
-          raise HTTPException(detail=f"{erro}", status_code =400)
+        print(erro)
       
 def buscar_cliente_banco(nome: str):
     with Session(engine) as session:
