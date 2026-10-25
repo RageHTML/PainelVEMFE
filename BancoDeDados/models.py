@@ -4,6 +4,7 @@ from datetime import date
 from fastapi import Depends,Response, HTTPException, Request
 from dotenv_vault import load_dotenv
 from sqlmodel import Field, SQLModel, create_engine, Session, select
+import re
 
 load_dotenv()
 
@@ -29,17 +30,18 @@ class Produto(SQLModel, table=True):
   data_entregue: date | None = Field()
 
 async def salvar_cliente_banco(request: Request, cliente: Cliente ):
-    json = await request.json()
-    nome_completo = json['nome_completo']
-    nome_mae = json['nome_mae']
-    endereco = json['endereco']
+    campos_dict = await request.json()
+    chave_campos = campos_dict.keys()
 
-    
-    if nome_completo == "" or nome_mae == "" or endereco == "":
-       raise HTTPException(detail="Nome completo esta vazio",status_code=400)
-    elif len(nome_completo) < 3:
-       raise HTTPException (detail="Minimo 3 caracteres para nome", status_code=400)
+    for c in chave_campos:
+       campo = re.sub("_", " ", c)
+       conteudo_campo = campos_dict[f'{c}'].strip()
 
+       if conteudo_campo == "":
+          raise HTTPException(detail=f"O campo {campo} está vazio.",status_code=422)
+       elif len(conteudo_campo) < 3:
+          raise HTTPException (detail=f"quantidade de caracteres de {campo} isuficiente", status_code=400)
+       
     try:  
       with Session(engine) as session:
         db_cliente = cliente.model_validate(cliente)
