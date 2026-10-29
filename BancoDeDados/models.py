@@ -43,17 +43,14 @@ async def salvar_cliente_banco(request: Request, cliente: Cliente ):
 
       if c == "cpf":
          limpo = re.sub(r"\D","", conteudo_campo).lower()
-         print(limpo)
          if len(conteudo_campo) < 11 or len(conteudo_campo) > 15:
             raise HTTPException(detail=f"Insira um {campo} com 11 digitos", status_code=422)
       elif c == "nome_completo" or c == "nome_mae":
          limpo = re.sub(r"\d|\W","",conteudo_campo).lower()
-         print(limpo)
          if len (conteudo_campo) < 3:
             raise HTTPException(detail=f"Insira uma palavra mais longa para {campo}", status_code=422)
       elif c == "endereco":
          limpo = re.sub(r"\W","",conteudo_campo).lower()
-         print(limpo)
       
           
       if conteudo_campo == "":
