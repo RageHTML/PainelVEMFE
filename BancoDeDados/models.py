@@ -29,9 +29,12 @@ class Produto(SQLModel, table=True):
   data_pedido: date = Field(default_factory=date.today)
   data_entregue: date | None = Field()
 
-def limpar(texto):
-   limpo = re.match("[a-z]",)
-   return limpo
+def buscar_cpf(cpf: str):
+    with Session(engine) as session:
+        statement = select(Cliente).where(Cliente.cpf == cpf)
+        resultados = session.exec(statement).first()
+        return resultados
+
 
 async def salvar_cliente_banco(request: Request, cliente: Cliente ):
    campos_dict = await request.json()
@@ -43,8 +46,12 @@ async def salvar_cliente_banco(request: Request, cliente: Cliente ):
 
       if c == "cpf":
          limpo = re.sub(r"\D","", conteudo_campo).lower()
-         if len(conteudo_campo) < 11 or len(conteudo_campo) > 15:
+         resultados = buscar_cpf(limpo)
+
+         if len(conteudo_campo) < 11 or len(conteudo_campo) > 11:
             raise HTTPException(detail=f"Insira um {campo} com 11 digitos", status_code=422)
+         elif resultados != None:
+            raise HTTPException(detail=f"cpf ja cadastrado", status_code=422)
       elif c == "nome_completo" or c == "nome_mae":
          limpo = re.sub(r"\d|\W","",conteudo_campo).lower()
          if len (conteudo_campo) < 3:
@@ -74,6 +81,8 @@ def buscar_cliente_banco(nome: str):
         statement = select(Cliente).where(Cliente.nome.contains(nome))
         resultados = session.exec(statement).all()
         return resultados
+
+
 
 
 def salvar_produto_banco(produto: Produto):
