@@ -1,13 +1,12 @@
-import os
-from typing import Annotated
-from datetime import date
+from sqlmodel import Field, SQLModel, create_engine, Session, select
 from fastapi import Depends,Response, HTTPException, Request
 from dotenv_vault import load_dotenv
-from sqlmodel import Field, SQLModel, create_engine, Session, select
+from typing import Annotated
+from datetime import date
 import re
+import os
 
 load_dotenv()
-
 engine = create_engine(os.getenv("DATABASE_URL"), echo=True)
 
 
@@ -46,18 +45,21 @@ async def salvar_cliente_banco(request: Request, cliente: Cliente ):
 
       if c == "cpf":
          limpo = re.sub(r"\D","", conteudo_campo).lower()
+         campos_dict[c] = limpo
          resultados = buscar_cpf(limpo)
 
-         if len(conteudo_campo) < 11 or len(conteudo_campo) > 11:
+         if len(limpo) != 11:
             raise HTTPException(detail=f"Insira um {campo} com 11 digitos", status_code=422)
          elif resultados != None:
             raise HTTPException(detail=f"cpf ja cadastrado", status_code=422)
       elif c == "nome_completo" or c == "nome_mae":
          limpo = re.sub(r"\d|\W","",conteudo_campo).lower()
-         if len (conteudo_campo) < 3:
+         campos_dict[c] = limpo
+         if len (limpo) < 3:
             raise HTTPException(detail=f"Insira uma palavra mais longa para {campo}", status_code=422)
       elif c == "endereco":
          limpo = re.sub(r"\W","",conteudo_campo).lower()
+         campos_dict[c] = limpo
       
           
       if conteudo_campo == "":
@@ -78,10 +80,9 @@ async def salvar_cliente_banco(request: Request, cliente: Cliente ):
       
 def buscar_cliente_banco(nome: str):
     with Session(engine) as session:
-        statement = select(Cliente).where(Cliente.nome.contains(nome))
-        resultados = session.exec(statement).all()
-        return resultados
-
+        statement = select(Cliente).where(Cliente.nome == nome)
+        resultados = session.exec(statement)
+        return resultados.nome
 
 
 
