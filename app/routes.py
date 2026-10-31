@@ -13,6 +13,15 @@ from BancoDeDados.models import (
 router = APIRouter()
 templates = Jinja2Templates(directory="InterfaceWeb")
 
+@router.get("/", response_class=HTMLResponse)
+def exibir_pagina_contrato(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="pages/raiz/index.html",
+        context={"pagina_atual": "raiz"},
+        status_code=200
+    )
+
 @router.get("/contratos", response_class=HTMLResponse)
 def exibir_pagina_contrato(request: Request):
     return templates.TemplateResponse(
@@ -31,10 +40,6 @@ def pagina_clientes(request: Request):
         status_code=200
     )
 
-@router.post("/clientes")
-async def criar_cliente(request: Request, cliente: Cliente):
-    return await salvar_cliente_banco(request,cliente)
-
 @router.get("/produtos", response_class=HTMLResponse)
 async def pagina_produtos(request: Request):
     return templates.TemplateResponse(
@@ -48,6 +53,9 @@ async def pagina_produtos(request: Request):
 async def buscar_cliente(nome: str):
     if nome:
         return buscar_cliente_banco(nome)
+@router.post("/clientes")
+async def criar_cliente(request: Request, cliente: Cliente):
+    return await salvar_cliente_banco(request,cliente)
 
 @router.post("/produtos/registrar")
 async def criar_produto(produto: Produto):

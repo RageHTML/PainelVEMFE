@@ -17,6 +17,11 @@
         </button>
 
         <nav class="nav-menu">
+            <a href="/" class="nav-link {% if pagina_atual == 'raiz' %}active{% endif %}">
+                <span class="icon">🏠</span>
+                <span class="text">Inicio</span>
+            </a>
+        
             <a href="/clientes" class="nav-link {% if pagina_atual == 'clientes' %}active{% endif %}">
                 <span class="icon">👤</span>
                 <span class="text">Clientes</span>
