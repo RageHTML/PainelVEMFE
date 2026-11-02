@@ -1,16 +1,21 @@
-const inputNome = document.getElementById("nome_completo");
+const campo_nome = document.getElementById("nome_completo");
 const inputIdOculto = document.getElementById("cliente_id");
 const dataList = document.getElementById("lista_clientes");
 const formulario = document.getElementById("form");
 let clientesEncontrados = [];
 
-if (inputNome) {
-    inputNome.addEventListener("input", async (event) => {
+if (campo_nome) {
+    campo_nome.addEventListener("input", async (event) => {
         const texto = event.target.value.trim();
 
         if (texto.length >= 2) {
             try {
-                const resposta = await fetch(`/produtos/clientes?nome=${encodeURIComponent(texto)}`);
+                const resposta = await fetch(`/clientes/buscar`,{
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ nome: texto })
+                });
+
                 const dados = await resposta.json();
 
                 if (Array.isArray(dados)) {

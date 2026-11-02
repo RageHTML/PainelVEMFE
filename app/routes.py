@@ -49,10 +49,12 @@ async def pagina_produtos(request: Request):
         status_code=200
     )
 
-@router.get("/clientes/buscar")
-async def buscar_cliente(nome: str):
-    if nome:
-        return buscar_cliente_banco(nome)
+@router.post("/clientes/buscar")
+async def buscar_cliente(request: Request):
+    data = await request.json()
+    nome = data.get("nome")
+    return buscar_cliente_banco(nome)
+    
 @router.post("/clientes")
 async def criar_cliente(request: Request, cliente: Cliente):
     return await salvar_cliente_banco(request,cliente)
