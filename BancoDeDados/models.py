@@ -33,9 +33,8 @@ def buscar_cpf(cpf: str):
         statement = select(Cliente).where(Cliente.cpf == cpf)
         resultados = session.exec(statement).first()
         return resultados
-
-
-async def salvar_cliente_banco(request: Request, cliente: Cliente ):
+        
+async def salvar_cliente_banco(request: Request, cliente: Cliente):
    campos_dict = await request.json()
    chave_campos = campos_dict.keys()
 
@@ -49,23 +48,23 @@ async def salvar_cliente_banco(request: Request, cliente: Cliente ):
          resultados = buscar_cpf(limpo)
 
          if len(limpo) != 11:
-            raise HTTPException(detail=f"Insira um {campo} com 11 digitos", status_code=422)
+            raise HTTPException(detail=f"O campo {campo} deve conter exatamente 11 dígitos.", status_code=422)
          elif resultados != None:
-            raise HTTPException(detail=f"cpf ja cadastrado", status_code=422)
+            raise HTTPException(detail="Este CPF já está cadastrado no sistema.", status_code=422)
       elif c == "nome_completo" or c == "nome_mae":
-         limpo = re.sub(r"\d|\W","",conteudo_campo).lower()
+         limpo = " ".join(conteudo_campo.split()).lower()
          campos_dict[c] = limpo
          if len (limpo) < 3:
-            raise HTTPException(detail=f"Insira uma palavra mais longa para {campo}", status_code=422)
+            raise HTTPException(detail=f"O campo {campo} deve conter ao menos 3 caracteres.", status_code=422)
       elif c == "endereco":
-         limpo = re.sub(r"\W","",conteudo_campo).lower()
+         limpo = " ".join(conteudo_campo.split()).lower()
          campos_dict[c] = limpo
       
           
       if conteudo_campo == "":
-         raise HTTPException(detail=f"Preencha {campo} está vazio.",status_code=422)
+         raise HTTPException(detail=f"O campo {campo} não pode estar vazio.", status_code=422)
       elif len(conteudo_campo) < 3:
-         raise HTTPException (detail=f"quantidade de caracteres de {campo} isuficiente", status_code=400)
+         raise HTTPException (detail=f"A quantidade de caracteres no campo {campo} é insuficiente.", status_code=400)
        
    try:  
       with Session(engine) as session:
