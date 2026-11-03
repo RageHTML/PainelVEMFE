@@ -32,6 +32,7 @@ def buscar_cpf(cpf: str):
     with Session(engine) as session:
         statement = select(Cliente).where(Cliente.cpf == cpf)
         resultados = session.exec(statement).first()
+        print("|||||||||||||||->",resultados)
         return resultados
         
 async def salvar_cliente_banco(request: Request, cliente: Cliente):
@@ -81,9 +82,6 @@ def buscar_cliente_banco(nome: str):
     with Session(engine) as session:
         statement = select(Cliente).where(Cliente.nome_completo.contains(nome))
         resultados = session.exec(statement).all()
-        for r in resultados:
-           print(r.nome_completo)
-
         return resultados
 
 

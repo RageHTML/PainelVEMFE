@@ -1,5 +1,24 @@
 {% extends "shared/index.html" %}
 
+{% block title %}
+    Gere um contrato
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="/static/pages/contratos/style.css">
+{% endblock %}
+
+{% block extra_js %}
+    <script src="/static/pages/contratos/script.js" defer></script>
+{% endblock %}
+
 {% block content %}
     <h1>Contratos</h1>
+    <form action="/contrato" method="post" id="form">
+        <label for="nome_completo">Cliente (digite para buscar):</label><br>
+        <input type="text" id="nome_completo" list="lista_clientes" autocomplete="off" placeholder="Digite o nome...">
+        <input type="hidden" id="cliente_id"><br><br>
+        <datalist id="lista_clientes"></datalist>
+        <button type="submit">Gerar</button>
+    </form>
 {% endblock %}
