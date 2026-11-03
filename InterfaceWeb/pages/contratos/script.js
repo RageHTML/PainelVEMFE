@@ -2,7 +2,7 @@ const campo_nome = document.getElementById("nome_completo");
 const inputIdOculto = document.getElementById("cliente_id");
 const lista_clientes = document.getElementById("lista_clientes");
 const formulario = document.getElementById("form");
-let clientesEncontrados = [];
+let clienteEncontrado = null;
 
 if (campo_nome) {
     campo_nome.addEventListener("input", async (event) => {
@@ -20,27 +20,25 @@ if (campo_nome) {
 
                 console.log(dados);
 
-                if (Array.isArray(dados) && dados.length > 0) {
-                    clientesEncontrados = dados;
+                if (dados != null) {
+                    clienteEncontrado = dados;
                 } else {
-                    clientesEncontrados = [];
+                    clienteEncontrado = null;
                     exibirNotificacao('Nenhum cliente foi localizado com os dados informados.', '404', 'error');
                 }
 
-                if (lista_clientes) {
+                if (clienteEncontrado != null) {
                     lista_clientes.innerHTML = "";
-                    clientesEncontrados.forEach(cliente => {
-                        const option = document.createElement("option");
-                        option.value = cliente.nome_completo;
-                        lista_clientes.appendChild(option);
-                    });
+                    const option = document.createElement("option");
+                    option.value = clienteEncontrado;
+                    lista_clientes.appendChild(option);
                 }
             } catch (erro) {
-                clientesEncontrados = [];
+                clientesEncontrados = null;
                 exibirNotificacao('Erro de conexão com o servidor', '400', "error");
             }
         } else {
-            clientesEncontrados = [];
+            clientesEncontrados = null;
             if (lista_clientes) lista_clientes.innerHTML = "";
         }
     });
