@@ -8,7 +8,7 @@ if (campo_nome) {
     campo_nome.addEventListener("input", async (event) => {
         const texto = event.target.value.trim();
 
-        if (texto.length >= 2) {
+        if (texto.length >= 1) {
             try {
                 const resposta = await fetch(`/clientes/buscar`,{
                     method: "POST",
@@ -22,17 +22,14 @@ if (campo_nome) {
 
                 if (Array.isArray(dados) && dados.length > 0) {
                     clientesEncontrados = dados;
-                    
                 } else {
-                    exibirNotificacao('nao encontrado', '404', "error");
+                    clientesEncontrados = [];
+                    exibirNotificacao('Nenhum cliente foi localizado com os dados informados.', '404', 'error');
                 }
 
-
                 if (lista_clientes) {
-                
                     lista_clientes.innerHTML = "";
                     clientesEncontrados.forEach(cliente => {
-                  
                         const option = document.createElement("option");
                         option.value = cliente.nome_completo;
                         lista_clientes.appendChild(option);
@@ -40,18 +37,11 @@ if (campo_nome) {
                 }
             } catch (erro) {
                 clientesEncontrados = [];
+                exibirNotificacao('Erro de conexão com o servidor', '400', "error");
             }
         } else {
             clientesEncontrados = [];
             if (lista_clientes) lista_clientes.innerHTML = "";
-        }
-
-        const clienteSelecionado = clientesEncontrados.find(c => c.nome_completo === texto);
-
-        if (clienteSelecionado) {
-            inputIdOculto.value = clienteSelecionado.id;
-        } else {
-            inputIdOculto.value = "";
         }
     });
 }
