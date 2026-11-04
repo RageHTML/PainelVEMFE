@@ -17,3 +17,7 @@ painel_vf/.env
 .DS_Store
 *.log
 contrato.pdf
+uv.lock
+pyproject.toml
+contrato.pdf
+
