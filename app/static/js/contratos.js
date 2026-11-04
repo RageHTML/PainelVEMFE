@@ -47,38 +47,29 @@ if (campo_nome) {
 async function obterFormulario(event) {
     event.preventDefault();
 
-    const rawId = inputIdOculto ? inputIdOculto.value : null;
-    const rawValor = document.getElementById("valor").value;
+    let form = new FormData(formulario)
+    let campos_iterator = form.entries()
+    let campos = Object.fromEntries(campos_iterator)
+    let campos_json = JSON.stringify(campos)
+    let campos_obj = JSON.parse(campos_json)
+    let status_code = 0
 
-    const dadosProdutos = {
-        nome_completo: document.getElementById("nome_completo").value,
-        cliente_id: rawId ? parseInt(rawId, 10) : null,
-        descricao: document.getElementById("descricao").value,
-        valor: parseFloat(rawValor) || 0.0,
-        forma_pagamento: document.getElementById("forma_pagamento").value
-    };
+    resposta = await fetch("/contratos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: campos_json
+    });
 
-    try {
-        const resposta = await fetch("/produtos/clientes", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(dadosProdutos)
-        });
+    const dados = await resposta.json();
+    status_code = resposta.status
 
-        if (!resposta.ok) {
-            const erroJson = await resposta.json().catch(() => ({ detail: "Erro ao cadastrar produto." }));
-            exibirNotificacao(erroJson.detail || "Erro ao cadastrar produto", "200", "error");
-            return;
-        }
-
-        exibirNotificacao("Produto cadastrado com sucesso!", "200", "sucesso");
+    if (resposta.ok == false){
+        exibirNotificacao(`${dados.detail}`, `${status_code}`, "error");
+    } else {
+        exibirNotificacao("Cliente cadastrado com sucesso!", "200", "sucesso");
         formulario.reset();
-        if (inputIdOculto) inputIdOculto.value = "";
-        if (lista_clientes) lista_clientes.innerHTML = "";
-
-    } catch (erro) {
-        exibirNotificacao("Erro de conexão com o servidor", "400", "error");
     }
+
 }
 
 if (formulario) {

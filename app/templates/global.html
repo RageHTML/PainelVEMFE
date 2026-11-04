@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}PainelVF{% endblock %}</title>
     
-    <link rel="stylesheet" href="/static/shared/style.css">
-    {%block extra_css%}{%endblock%}
+    <link rel="stylesheet" href="/static/css/global.css">
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
     <div id="notificacao-container"></div>
@@ -42,7 +42,7 @@
         {% block content %}{% endblock %}
     </main>
 
-    <script src="/static/shared/script.js" defer></script>
+    <script src="/static/js/global.js" defer></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

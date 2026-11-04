@@ -1,14 +1,7 @@
-from sqlmodel import Field, SQLModel, create_engine, Session, select
+from sqlmodel import Field, SQLModel, Session, select
 from fastapi import Depends,Response, HTTPException, Request
-from dotenv_vault import load_dotenv
-from typing import Annotated
 from datetime import date
 import re
-import os
-
-load_dotenv()
-engine = create_engine(os.getenv("DATABASE_URL"), echo=True)
-
 
 class Cliente(SQLModel, table=True):
   id: int | None = Field(default=None, primary_key=True)
@@ -18,23 +11,6 @@ class Cliente(SQLModel, table=True):
   data_nascimento: date = Field()
   endereco: str = Field()
 
-class Produto(SQLModel, table=True):
-  id: int | None = Field(default=None, primary_key=True)
-  cliente_id: int | None = Field(default=None, foreign_key="cliente.id")
-  descricao: str | None = Field(default=None)
-  valor: float = Field()
-  forma_pagamento: str | None = Field()
-  status: str = Field(default="pendente")
-  data_pedido: date = Field(default_factory=date.today)
-  data_entregue: date | None = Field()
-
-def buscar_cpf(cpf: str):
-    with Session(engine) as session:
-        statement = select(Cliente).where(Cliente.cpf == cpf)
-        resultados = session.exec(statement).first()
-        print("|||||||||||||||->",resultados)
-        return resultados
-        
 async def salvar_cliente_banco(request: Request, cliente: Cliente):
    campos_dict = await request.json()
    chave_campos = campos_dict.keys()
@@ -77,20 +53,4 @@ async def salvar_cliente_banco(request: Request, cliente: Cliente):
    except Exception as e:
       erro = str(e).replace("\n", "").strip()
       print(erro)
-      
-def buscar_cliente_banco(nome: str):
-    with Session(engine) as session:
-        statement = select(Cliente).where(Cliente.nome_completo.contains(nome))
-        resultados = session.exec(statement).all()
-        for r in resultados:
-           return r.nome_completo
-
-
-
-def salvar_produto_banco(produto: Produto):
-    with Session(engine) as session:
-        session.add(produto)
-        session.commit()
-        session.refresh(produto)
-        return produto
 
