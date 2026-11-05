@@ -1,5 +1,4 @@
 const campo_nome = document.getElementById("nome_completo");
-const inputIdOculto = document.getElementById("cliente_id");
 const lista_clientes = document.getElementById("lista_clientes");
 const formulario = document.getElementById("form");
 let clienteEncontrado = null;
@@ -17,8 +16,6 @@ if (campo_nome) {
                 });
 
                 const dados = await resposta.json();
-
-                console.log(dados);
 
                 if (dados != null) {
                     clienteEncontrado = dados;
@@ -44,34 +41,32 @@ if (campo_nome) {
     });
 }
 
-async function obterFormulario(event) {
-    event.preventDefault();
-
-    let form = new FormData(formulario)
-    let campos_iterator = form.entries()
-    let campos = Object.fromEntries(campos_iterator)
-    let campos_json = JSON.stringify(campos)
-    let campos_obj = JSON.parse(campos_json)
-    let status_code = 0
-
-    resposta = await fetch("/contratos", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: campos_json
-    });
-
-    const dados = await resposta.json();
-    status_code = resposta.status
-
-    if (resposta.ok == false){
-        exibirNotificacao(`${dados.detail}`, `${status_code}`, "error");
-    } else {
-        exibirNotificacao("Cliente cadastrado com sucesso!", "200", "sucesso");
-        formulario.reset();
-    }
-
-}
 
 if (formulario) {
-    formulario.addEventListener("submit", obterFormulario);
+    formulario.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        let form = new FormData(formulario)
+        let campos_iterator = form.entries()
+        let campos = Object.fromEntries(campos_iterator)
+        let campos_json = JSON.stringify(campos)
+        let campos_obj = JSON.parse(campos_json)
+        let status_code = 0
+
+        resposta = await fetch("/contratos", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: campos_json
+        });
+
+        const dados = await resposta.json();
+        status_code = resposta.status
+
+        if (resposta.ok == false){
+            exibirNotificacao(`${dados.detail}`, `${status_code}`, "error");
+        } else {
+            exibirNotificacao("Cliente cadastrado com sucesso!", "200", "sucesso");
+            formulario.reset();
+        }
+    });
 }

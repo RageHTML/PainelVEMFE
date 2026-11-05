@@ -1,5 +1,7 @@
-from sqlmodel import Field, SQLModel, Session, select
-from fastapi import Depends,Response, HTTPException, Request
+from app.database import engine
+from sqlmodel import Field, SQLModel, Session, Relationship
+from fastapi import HTTPException, Request
+from app.models.universal import buscar_cpf
 from datetime import date
 import re
 
@@ -10,6 +12,8 @@ class Cliente(SQLModel, table=True):
   cpf: str = Field(unique=True)
   data_nascimento: date = Field()
   endereco: str = Field()
+  contratos: list["Contratos"] = Relationship(back_populates="cliente")
+
 
 async def salvar_cliente_banco(request: Request, cliente: Cliente):
    campos_dict = await request.json()
