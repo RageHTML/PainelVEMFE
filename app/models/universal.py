@@ -1,5 +1,6 @@
 from app.database import engine
-from sqlmodel import Session, select
+from sqlmodel import Session, select, SQLModel
+from app.models.clientes import Cliente
 
 
 def buscar_cliente_banco(nome: str):
@@ -23,3 +24,8 @@ def buscar_cpf(cpf: str):
         resultados = session.exec(statement).all()
         for r in resultados:
            return r.cpf
+
+def limpar_e_recriar_banco():
+    SQLModel.metadata.drop_all(engine)
+    SQLModel.metadata.create_all(engine)
+    print("Banco de dados limpo e recriado com sucesso!")

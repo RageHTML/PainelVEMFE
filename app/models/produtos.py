@@ -3,9 +3,12 @@ from app.database import engine
 from datetime import date
 
 class Produto(SQLModel, table=True):
-  id: int | None = Field(default=None, primary_key=True)
-  descricao: str | None = Field(default=None)
-  contratos: list["Contratos"] = Relationship(back_populates="produto")
+    __tablename__ = "produto"
+
+    id: int | None = Field(default=None, primary_key=True)
+    descricao: str | None = Field(default=None)
+
+    contratos: list["Contratos"] = Relationship(back_populates="produto")
 
 
 def salvar_produto_banco(produto: Produto):

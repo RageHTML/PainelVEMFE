@@ -24,5 +24,5 @@ async def buscar_cliente(request: Request):
     return buscar_cliente_banco(nome)
 
 @router.post("/clientes")
-async def criar_cliente(request: Request, cliente: Cliente):
-    return await salvar_cliente_banco(request,cliente)
+async def criar_cliente(request: Request):
+    return await salvar_cliente_banco(request)

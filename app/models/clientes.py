@@ -1,21 +1,25 @@
 from app.database import engine
 from sqlmodel import Field, SQLModel, Session, Relationship
 from fastapi import HTTPException, Request
-from app.models.universal import buscar_cpf
 from datetime import date
 import re
 
+
 class Cliente(SQLModel, table=True):
-  id: int | None = Field(default=None, primary_key=True)
-  nome_completo: str = Field()
-  nome_mae: str = Field()
-  cpf: str = Field(unique=True)
-  data_nascimento: date = Field()
-  endereco: str = Field()
-  contratos: list["Contratos"] = Relationship(back_populates="cliente")
+    __tablename__ = "cliente"
+
+    id: int | None = Field(default=None, primary_key=True)
+    nome_completo: str
+    nome_mae: str
+    cpf: str = Field(unique=True)
+    data_nascimento: date
+    endereco: str
+
+    contratos: list["Contratos"] = Relationship(back_populates="cliente")
 
 
-async def salvar_cliente_banco(request: Request, cliente: Cliente):
+async def salvar_cliente_banco(request: Request):
+   from app.models.universal import buscar_cpf
    campos_dict = await request.json()
    chave_campos = campos_dict.keys()
 
@@ -49,7 +53,7 @@ async def salvar_cliente_banco(request: Request, cliente: Cliente):
        
    try:  
       with Session(engine) as session:
-         db_cliente = cliente.model_validate(campos_dict)
+         db_cliente = Cliente.model_validate(campos_dict)
          session.add(db_cliente)
          session.commit()
          session.refresh(db_cliente)
