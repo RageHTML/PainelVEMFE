@@ -20,6 +20,7 @@ class Cliente(SQLModel, table=True):
 
 async def salvar_cliente_banco(request: Request):
    from app.models.universal import buscar_cpf
+   from app.models.contratos import Contratos
    campos_dict = await request.json()
    chave_campos = campos_dict.keys()
 
@@ -53,10 +54,11 @@ async def salvar_cliente_banco(request: Request):
        
    try:  
       with Session(engine) as session:
-         db_cliente = Cliente.model_validate(campos_dict)
+         db_cliente = Contratos.model_validate(campos_dict)
          session.add(db_cliente)
          session.commit()
          session.refresh(db_cliente)
+         db_contrato = Contratos(id_cliente=db_cliente.id)
          return db_cliente
    except Exception as e:
       erro = str(e).replace("\n", "").strip()

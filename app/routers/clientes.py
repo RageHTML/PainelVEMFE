@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import HTMLResponse
-from app.models.clientes import Cliente, salvar_cliente_banco
+from app.models.contratos import Contratos
 from app.models.universal import buscar_cliente_banco
 
 from app.main import templates
