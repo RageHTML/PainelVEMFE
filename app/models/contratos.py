@@ -18,3 +18,7 @@ class Contratos(SQLModel, table=True):
     status: str | None = Field(default="pendente")
     data_pedido: date | None = Field(default_factory=date.today)
     data_entregue: date | None = Field(default=None)
+
+def buscar_contratos(cpf: str):
+    
+    return 

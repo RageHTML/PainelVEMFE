@@ -267,4 +267,3 @@ async def criar_contrato(request: Request):
     gerar_contrato(nome_completo, cpf, endereco)
 
     return HTTPException(detail=f"Contrato criado para o cliente: {nome}", status_code=200)
-

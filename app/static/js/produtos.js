@@ -1,14 +1,13 @@
-const campo_nome = document.getElementById("nome_completo");
-const inputIdOculto = document.getElementById("cliente_id");
-const dataList = document.getElementById("lista_clientes");
+const campo_busca = document.getElementById("busca");
+const lista_clientes = document.getElementById("lista_clientes");
 const formulario = document.getElementById("form");
-let clientesEncontrados = [];
+let clienteEncontrado = null;
 
-if (campo_nome) {
-    campo_nome.addEventListener("input", async (event) => {
+if (campo_busca) {
+    campo_busca.addEventListener("input", async (event) => {
         const texto = event.target.value.trim();
 
-        if (texto.length >= 2) {
+        if (texto.length >= 1) {
             try {
                 const resposta = await fetch(`/clientes/buscar`,{
                     method: "POST",
@@ -18,77 +17,55 @@ if (campo_nome) {
 
                 const dados = await resposta.json();
 
-                if (Array.isArray(dados)) {
-                    clientesEncontrados = dados;
-                } else if (dados && Array.isArray(dados.clientes)) {
-                    clientesEncontrados = dados.clientes;
+                if (dados != null) {
+                    clienteEncontrado = dados;
                 } else {
-                    clientesEncontrados = [];
+                    clienteEncontrado = null;
                 }
 
-                if (dataList) {
-                    dataList.innerHTML = "";
-                    clientesEncontrados.forEach(cliente => {
-                        const option = document.createElement("option");
-                        option.value = cliente.nome_completo;
-                        dataList.appendChild(option);
-                    });
+                if (clienteEncontrado != null) {
+                    lista_clientes.innerHTML = "";
+                    const option = document.createElement("option");
+                    option.value = clienteEncontrado;
+                    lista_clientes.appendChild(option);
                 }
             } catch (erro) {
-                clientesEncontrados = [];
+                clientesEncontrados = null;
+                exibirNotificacao('Erro de conexão com o servidor', '400', "error");
             }
         } else {
-            clientesEncontrados = [];
-            if (dataList) dataList.innerHTML = "";
-        }
-
-        const clienteSelecionado = clientesEncontrados.find(c => c.nome_completo === texto);
-
-        if (clienteSelecionado) {
-            inputIdOculto.value = clienteSelecionado.id;
-        } else {
-            inputIdOculto.value = "";
+            clientesEncontrados = null;
+            if (lista_clientes) lista_clientes.innerHTML = "";
         }
     });
 }
 
-async function obterFormulario(event) {
-    event.preventDefault();
-
-    const rawId = inputIdOculto ? inputIdOculto.value : null;
-    const rawValor = document.getElementById("valor").value;
-
-    const dadosProdutos = {
-        nome_completo: document.getElementById("nome_completo").value,
-        cliente_id: rawId ? parseInt(rawId, 10) : null,
-        descricao: document.getElementById("descricao").value,
-        valor: parseFloat(rawValor) || 0.0,
-        forma_pagamento: document.getElementById("forma_pagamento").value
-    };
-
-    try {
-        const resposta = await fetch("/produtos/clientes", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(dadosProdutos)
-        });
-
-        if (!resposta.ok) {
-            const erroJson = await resposta.json().catch(() => ({ detail: "Erro ao cadastrar produto." }));
-            exibirNotificacao(erroJson.detail || "Erro ao cadastrar produto", "200", "error");
-            return;
-        }
-
-        exibirNotificacao("Produto cadastrado com sucesso!", "200", "sucesso");
-        formulario.reset();
-        if (inputIdOculto) inputIdOculto.value = "";
-        if (dataList) dataList.innerHTML = "";
-
-    } catch (erro) {
-        exibirNotificacao("Erro de conexão com o servidor", "400", "error");
-    }
-}
 
 if (formulario) {
-    formulario.addEventListener("submit", obterFormulario);
+    formulario.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        let form = new FormData(formulario)
+        let campos_iterator = form.entries()
+        let campos = Object.fromEntries(campos_iterator)
+        let campos_json = JSON.stringify(campos)
+        let campos_obj = JSON.parse(campos_json)
+        let status_code = 0
+
+        resposta = await fetch("/contratos", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: campos_json
+        });
+
+        const dados = await resposta.json();
+        status_code = resposta.status
+
+        if (resposta.ok == false){
+            exibirNotificacao(`${dados.detail}`, `${status_code}`, "error");
+        } else {
+            exibirNotificacao("Cliente cadastrado com sucesso!", "200", "sucesso");
+            formulario.reset();
+        }
+    });
 }
