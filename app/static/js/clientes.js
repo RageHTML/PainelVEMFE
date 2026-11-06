@@ -8,6 +8,7 @@ async function obterFormulario(event) {
     let campos = Object.fromEntries(campos_iterator)
     let campos_json = JSON.stringify(campos)
     let campos_obj = JSON.parse(campos_json)
+    console.log(campos_obj)
     let status_code = 0
 
     resposta = await fetch("/clientes", {

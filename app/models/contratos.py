@@ -13,8 +13,8 @@ class Contratos(SQLModel, table=True):
     cliente: Optional["Cliente"] = Relationship(back_populates="contratos")
     produto: Optional["Produto"] = Relationship(back_populates="contratos")
 
-    valor: float
+    valor: float | None
     forma_pagamento: str | None = Field(default=None)
-    status: str = Field(default="pendente")
-    data_pedido: date = Field(default_factory=date.today)
+    status: str | None = Field(default="pendente")
+    data_pedido: date | None = Field(default_factory=date.today)
     data_entregue: date | None = Field(default=None)

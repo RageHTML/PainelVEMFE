@@ -14,6 +14,8 @@ class Cliente(SQLModel, table=True):
     cpf: str = Field(unique=True)
     data_nascimento: date
     endereco: str
+    numero: str
+    bairro: str 
 
     contratos: list["Contratos"] = Relationship(back_populates="cliente")
 
@@ -42,11 +44,7 @@ async def salvar_cliente_banco(request: Request):
          campos_dict[c] = limpo
          if len (limpo) < 3:
             raise HTTPException(detail=f"O campo {campo} deve conter ao menos 3 caracteres.", status_code=422)
-      elif c == "endereco":
-         limpo = " ".join(conteudo_campo.split()).lower()
-         campos_dict[c] = limpo
       
-          
       if conteudo_campo == "":
          raise HTTPException(detail=f"O campo {campo} não pode estar vazio.", status_code=422)
       elif len(conteudo_campo) < 3:
@@ -54,11 +52,19 @@ async def salvar_cliente_banco(request: Request):
        
    try:  
       with Session(engine) as session:
-         db_cliente = Contratos.model_validate(campos_dict)
+         db_cliente = Cliente.model_validate(campos_dict)
          session.add(db_cliente)
          session.commit()
          session.refresh(db_cliente)
-         db_contrato = Contratos(id_cliente=db_cliente.id)
+
+         db_contrato = Contratos(
+            id_cliente=db_cliente.id,
+            status="Pendente"
+         )
+         
+         session.add(db_contrato)
+         session.commit()
+         session.refresh(db_cliente)
          return db_cliente
    except Exception as e:
       erro = str(e).replace("\n", "").strip()
