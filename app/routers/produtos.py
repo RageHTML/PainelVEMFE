@@ -18,11 +18,4 @@ async def pagina_produtos(request: Request):
 async def criar_produto(produto: Produto):
     return salvar_produto_banco(produto)
 
-@router.post("/produtos", response_class=HTMLResponse)
-async def lista_contratos(request: Request):
-    from app.models.contratos import buscar_contratos
-    dados = await  request.json()
-    nome = dados.get("busca")
-
-    return buscar_contratos(request)
 

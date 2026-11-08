@@ -1,5 +1,5 @@
 from app.database import engine
-from sqlmodel import Field, SQLModel, Session, Relationship
+from sqlmodel import Field, SQLModel, Session, Relationship, select
 from fastapi import HTTPException, Request
 from datetime import date
 import re
@@ -69,4 +69,12 @@ async def salvar_cliente_banco(request: Request):
    except Exception as e:
       erro = str(e).replace("\n", "").strip()
       print(erro)
+
+def buscar_id_cliente(nome: str):
+   with Session(engine) as session:
+      statement = select(Cliente).where(Cliente.nome_completo.contains(nome))
+      resultados = session.exec(statement).all()
+      for r in resultados:
+         id_cliente = r.id
+         return id_cliente
 

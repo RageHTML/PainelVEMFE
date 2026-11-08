@@ -19,6 +19,10 @@ class Contratos(SQLModel, table=True):
     data_pedido: date | None = Field(default_factory=date.today)
     data_entregue: date | None = Field(default=None)
 
-def buscar_contratos(cpf: str):
-    
-    return 
+def buscar_contratos(nome: str):
+    from app.models.clientes import buscar_id_cliente
+    id_cliente = buscar_id_cliente(nome)
+    with Session(engine) as session:
+        statement = select(Contratos).where(Contratos.id_cliente == int(id_cliente))
+        resultados = session.exec(statement).all()
+        return resultados
