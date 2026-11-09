@@ -8,11 +8,19 @@ router = APIRouter()
 async def pagina_produtos(request: Request):
     return templates.TemplateResponse(
         request=request,
-        name="produtos.html",
+        name="produto_busca.html",
         context={"pagina_atual": "produtos"},
         status_code=200
     )
 
+@router.get("/produtos/novo", response_class=HTMLResponse)
+async def pagina_produtos(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="produto_novo.html",
+        context={"pagina_atual": "produtos"},
+        status_code=200
+    )
 
 @router.post("/produtos/registrar")
 async def criar_produto(produto: Produto):

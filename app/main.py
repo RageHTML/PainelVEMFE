@@ -6,12 +6,12 @@ app = FastAPI()
 
 
 templates = Jinja2Templates(directory="app/templates")
-from app.routers import clientes, produtos, contratos, raiz
+from app.routers import clientes, contratos, produto, raiz
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 #limpar_e_recriar_banco()
 
 app.include_router(clientes.router)
-app.include_router(produtos.router)
+app.include_router(produto.router)
 app.include_router(contratos.router)
 app.include_router(raiz.router)

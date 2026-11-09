@@ -10,13 +10,13 @@ body {
     color: #2c3e50;
     display: flex;
     min-height: 100vh;
+    margin: 0;
+    padding: 0;
 }
 
-/* Sidebar Recolhível (Nav Rail) */
 .sidebar {
     width: 240px;
     background-color: #ffffff;
-    border-right: 1px solid #e2e8f0;
     display: flex;
     flex-direction: column;
     padding: 20px 12px;
@@ -67,10 +67,10 @@ body {
 
 .main-content {
     flex: 1;
-    padding: 40px;
+    padding: 30px; /* Mantém o respiro lateral para tudo dentro da página */
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
 }
 
 #notificacao-container {
@@ -81,43 +81,4 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
-}
-
-.notificacao {
-    min-width: 250px;
-    padding: 14px 20px;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: #ffffff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    animation: slideIn 0.3s ease-in-out;
-    transition: opacity 0.4s ease, transform 0.4s ease;
-}
-
-.notificacao.sucesso {
-    background-color: #10b981; /* Verde */
-}
-
-.notificacao.error {
-    background-color: #ef4444; /* Vermelho */
-}
-
-.notificacao.esconder {
-    opacity: 0;
-    transform: translateY(-20px);
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }

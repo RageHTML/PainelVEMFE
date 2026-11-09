@@ -1,0 +1,27 @@
+{% extends "global.html" %}
+
+{% block title %}Novo Produto - PainelVF{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="/static/css/produto_novo.css">
+{% endblock %}
+
+{% block extra_js %}
+    <script src="/static/js/produto_novo.js" defer></script>
+{% endblock %}
+
+{% block content %}
+    <nav class="nav-produto">
+        <a href="/produtos/novo">Novo Produto</a>
+        <a href="/produtos">Buscar Produtos</a>
+    </nav>
+    <form method="post" id="form">
+        <label for="nome_completo">Nome Completo:</label>
+        <input type="text" id="nome_completo" name="nome_completo" list="lista_clientes" autocomplete="off" placeholder="Digite o nome...">
+        <datalist id="lista_clientes"></datalist>
+
+        <label for="busca">Descricao:</label>
+        <textarea id="descricao" rows="5" cols="30"></textarea>
+        <button type="submit">Enviar</button>
+    </form>
+{% endblock %}

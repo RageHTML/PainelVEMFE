@@ -3,14 +3,18 @@
 {% block title %}Novo Produto - PainelVF{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="/static/css/produtos.css">
+    <link rel="stylesheet" href="/static/css/produto_busca.css">
 {% endblock %}
 
 {% block extra_js %}
-    <script src="/static/js/produtos.js" defer></script>
+    <script src="/static/js/produto_busca.js" defer></script>
 {% endblock %}
 
 {% block content %}
+    <nav class="nav-produto">
+        <a href="/produtos/novo">Novo Produto</a>
+        <a href="/produtos">Buscar Produtos</a>
+    </nav>
     <form method="post" id="form">
         <div class="form-row">
             <div class="input-group">
@@ -19,6 +23,10 @@
                 <datalist id="lista_clientes"></datalist>
             </div>
             <button type="submit">Enviar</button>
+        </div>
+        <form>
+                
+        </form>
         </div>
     </form>
 {% endblock %}

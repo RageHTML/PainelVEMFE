@@ -7,7 +7,6 @@ class Produto(SQLModel, table=True):
 
     id: int | None = Field(default=None, primary_key=True)
     descricao: str | None = Field(default=None)
-
     contratos: list["Contratos"] = Relationship(back_populates="produto")
 
 
