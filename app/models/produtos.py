@@ -1,4 +1,5 @@
 from sqlmodel import Session, select, Field, SQLModel, Relationship
+from fastapi import Request
 from app.database import engine
 from datetime import date
 
@@ -10,10 +11,14 @@ class Produto(SQLModel, table=True):
     contratos: list["Contratos"] = Relationship(back_populates="produto")
 
 
-def salvar_produto_banco(produto: Produto):
+async def salvar_produto_banco(request: Request):
+    data = await request.json()
+    
+    print(data)
     with Session(engine) as session:
-        session.add(produto)
+        db_produto = Produto.model_validate(data)
+        session.add(db_produto)
         session.commit()
-        session.refresh(produto)
-        return produto
+        session.refresh(db_produto)
+        return db_produto
 

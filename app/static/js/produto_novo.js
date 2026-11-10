@@ -52,7 +52,7 @@ if (formulario) {
         let campos_obj = JSON.parse(campos_json)
         let status_code = 0
 
-        resposta = await fetch("/contratos/buscar", {
+        resposta = await fetch("/produtos/registrar", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: campos_json

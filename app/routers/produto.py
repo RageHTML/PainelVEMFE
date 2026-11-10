@@ -23,7 +23,7 @@ async def pagina_produtos(request: Request):
     )
 
 @router.post("/produtos/registrar")
-async def criar_produto(produto: Produto):
-    return salvar_produto_banco(produto)
+async def criar_produto(request: Request):
+    return await salvar_produto_banco(request)
 
 

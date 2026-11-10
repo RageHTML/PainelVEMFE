@@ -268,10 +268,10 @@ async def criar_contrato(request: Request):
 
     return HTTPException(detail=f"Contrato criado para o cliente: {nome}", status_code=200)
 
+
 @router.post("/contratos/buscar")
 async def todos_contratos(request: Request):
   from app.models.contratos import buscar_contratos
   data = await request.json()
   q = data.get("busca")
-  print(q)
-  return buscar_contratos(q)
+  return await buscar_contratos(q)
