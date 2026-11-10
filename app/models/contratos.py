@@ -8,10 +8,9 @@ class Contratos(SQLModel, table=True):
 
     id: int | None = Field(default=None, primary_key=True)
     id_cliente: int | None = Field(default=None, foreign_key="cliente.id")
-    id_produto: int | None = Field(default=None, foreign_key="produto.id")
 
     cliente: Optional["Cliente"] = Relationship(back_populates="contratos")
-    produto: Optional["Produto"] = Relationship(back_populates="contratos")
+    produtos: list["Produto"] = Relationship(back_populates="contrato")
 
     valor: float | None
     forma_pagamento: str | None = Field(default=None)
