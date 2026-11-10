@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import HTMLResponse
 from app.main import templates
-from app.models.produtos import Produto, salvar_produto_banco
 router = APIRouter()
 
 @router.get("/produtos", response_class=HTMLResponse)
@@ -22,8 +21,9 @@ async def pagina_produtos(request: Request):
         status_code=200
     )
 
-@router.post("/produtos/registrar")
+@router.post("/produtos/novo")
 async def criar_produto(request: Request):
+    from app.models.produtos import salvar_produto_banco
     return await salvar_produto_banco(request)
 
 

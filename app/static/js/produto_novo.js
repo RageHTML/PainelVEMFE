@@ -52,17 +52,18 @@ if (formulario) {
         let campos_obj = JSON.parse(campos_json)
         let status_code = 0
 
-        resposta = await fetch("/produtos/registrar", {
+       
+
+        resposta = await fetch("/produtos/novo", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: campos_json
         });
 
-    
+        console.log(campos_json)
 
         const dados = await resposta.json();
         status_code = resposta.status
-        console.log(dados)
 
         if (resposta.ok == false){
             exibirNotificacao(`${dados.detail}`, `${status_code}`, "error");

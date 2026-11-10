@@ -1,5 +1,5 @@
 from sqlmodel import Session, select, Field, SQLModel, Relationship
-from fastapi import Request
+from fastapi import Request, HTTPException
 from app.database import engine
 from datetime import date
 
@@ -10,15 +10,30 @@ class Produto(SQLModel, table=True):
     descricao: str | None = Field(default=None)
     contratos: list["Contratos"] = Relationship(back_populates="produto")
 
-
-async def salvar_produto_banco(request: Request):
-    data = await request.json()
-    
-    print(data)
+async def salvar_descricao(descricao: str):
+    db_produto = Produto(descricao=f"{descricao}")
     with Session(engine) as session:
-        db_produto = Produto.model_validate(data)
         session.add(db_produto)
         session.commit()
         session.refresh(db_produto)
-        return db_produto
+    return HTTPException(detail="sucesso", status_code="200")
+
+async def salvar_produto_banco(request: Request):
+    campos_dict = await request.json()
+    chave_campos = campos_dict.keys()
+
+    for c in chave_campos:
+        conteudo = campos_dict[f'{c}']
+        if c == "descricao":
+            print(conteudo)
+        
+    """
+         with Session(engine) as session:
+                db_produto = Produto.model_validate(data)
+                session.add(db_produto)
+                session.commit()
+                session.refresh(db_produto)
+                return db_produto
+    """
+   
 
