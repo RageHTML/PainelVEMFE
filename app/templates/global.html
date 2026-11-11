@@ -26,19 +26,18 @@
                 <span class="icon">👤</span>
                 <span class="text">Clientes</span>
             </a>
-            <a href="/produtos" class="nav-link {% if pagina_atual == 'produtos' %}active{% endif %}">
-                <span class="icon">📦</span>
-                <span class="text">Produtos</span>
-            </a>
-
-            <a href="/contratos" class="nav-link {% if pagina_atual == 'contratos' %}active{% endif %}">
-                <span class="icon">📝</span>
-                <span class="text">Gerar Contratos</span>
-            </a>
         </nav>
     </aside>
 
     <main class="main-content">
+        {% if mostrar_nav_produto == true %}
+            <nav class="nav-produto">
+                <a href="/clientes">Novo Cliente</a>
+                <a href="/produtos/novo">Novo Contrato</a>
+                <a href="/produtos">Produtos do Cliente</a>
+            </nav>
+        {% endif %}
+        
         {% block content %}{% endblock %}
     </main>
 

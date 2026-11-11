@@ -11,13 +11,15 @@ class Produto(SQLModel, table=True):
     descricao: str | None = Field(default=None)
     contrato: Optional["Produto"] = Relationship(back_populates="contratos")
 
-async def salvar_descricao(descricao: str, id: str):
+
+def salvar_descricao(descricao: str, id: str):
     db_produto = Produto(descricao=f"{descricao}")
     with Session(engine) as session:
         session.add(db_produto)
         session.commit()
         session.refresh(db_produto)
     return HTTPException(detail="sucesso", status_code="200")
+
 
 async def salvar_produto_banco(request: Request):
     campos_dict = await request.json()
@@ -37,6 +39,6 @@ async def salvar_produto_banco(request: Request):
             session.commit()
             session.refresh(db_produto)
             return db_produto
-    """
+
    
 

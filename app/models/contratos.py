@@ -25,3 +25,13 @@ def buscar_contratos(nome: str):
         statement = select(Contratos).where(Contratos.id_cliente == int(id_cliente))
         resultados = session.exec(statement).all()
         return resultados
+
+def buscar_id_contrato(nome: str):
+    from app.models.clientes import buscar_id_cliente
+    id_cliente = buscar_id_cliente(nome)
+    with Session(engine) as session:
+        statement = select(Contratos).where(Contratos.id_cliente == int(id_cliente))
+        resultados = session.exec(statement).all()
+        for r in resultados:
+            r.id_contrato
+        return resultados
