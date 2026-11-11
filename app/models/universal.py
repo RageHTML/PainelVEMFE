@@ -1,15 +1,6 @@
 from app.database import engine
 from sqlmodel import Session, select, SQLModel
 from app.models.clientes import Cliente
-
-
-def buscar_cliente_banco(nome: str):
-    with Session(engine) as session:
-        from app.models.clientes import Cliente
-        statement = select(Cliente).where(Cliente.nome_completo.contains(nome))
-        resultados = session.exec(statement).all()
-        for r in resultados:
-           return r.nome_completo
         
 def buscar_dados_banco(nome: str):
     with Session(engine) as session:

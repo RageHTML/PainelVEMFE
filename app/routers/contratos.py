@@ -1,7 +1,6 @@
 from app.database import engine
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from fastapi import APIRouter, Request, HTTPException
-from app.models.universal import buscar_cliente_banco
 from app.models.clientes import Cliente
 from reportlab.lib.enums import TA_CENTER, TA_LEFT
 from fastapi.responses import HTMLResponse

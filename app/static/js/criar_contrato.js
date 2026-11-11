@@ -1,4 +1,4 @@
-const campo_busca = document.getElementById("busca");
+const campo_busca = document.getElementById("nome_completo");
 const lista_clientes = document.getElementById("lista_clientes");
 const formulario = document.getElementById("form");
 let clienteEncontrado = null;

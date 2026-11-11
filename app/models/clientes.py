@@ -78,3 +78,11 @@ def buscar_id_cliente(nome: str):
          id_cliente = int(r.id)
          return id_cliente
 
+def buscar_nome_completo(nome: str):
+    with Session(engine) as session:
+        from app.models.clientes import Cliente
+        statement = select(Cliente).where(Cliente.nome_completo.contains(nome))
+        resultados = session.exec(statement).all()
+        for r in resultados:
+           return r.nome_completo
+
