@@ -54,7 +54,7 @@ if (formulario) {
 
        
 
-        resposta = await fetch("/produtos/novo", {
+        resposta = await fetch("/clientes/contratos/criar", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: campos_json

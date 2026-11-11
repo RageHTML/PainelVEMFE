@@ -75,6 +75,6 @@ def buscar_id_cliente(nome: str):
       statement = select(Cliente).where(Cliente.nome_completo.contains(nome))
       resultados = session.exec(statement).all()
       for r in resultados:
-         id_cliente = r.id
+         id_cliente = int(r.id)
          return id_cliente
 

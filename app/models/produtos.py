@@ -9,7 +9,9 @@ class Produto(SQLModel, table=True):
 
     id: int | None = Field(default=None, primary_key=True)
     descricao: str | None = Field(default=None)
-    contrato: Optional["Produto"] = Relationship(back_populates="contratos")
+    
+    contrato_id: int | None = Field(default=None, foreign_key="contratos.id")
+    contrato: Optional["Contratos"] = Relationship(back_populates="produtos")
 
 
 def salvar_descricao(descricao: str, id: str):

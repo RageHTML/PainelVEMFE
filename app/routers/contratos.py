@@ -15,19 +15,6 @@ from datetime import datetime
 
 router = APIRouter()
 
-
-
-@router.get("/contratos", response_class=HTMLResponse)
-def exibir_pagina_contrato(request: Request):
-    return templates.TemplateResponse(
-        request=request,
-        name="contratos.html",
-        context={"pagina_atual": "contratos"},
-        status_code=200
-    )
-
-
-
 def converter_numero_extenso(valor):
   t = num2words(int(valor), lang='pt_BR')
   return t
@@ -246,27 +233,24 @@ def gerar_contrato(nome_completo: str, cpf: str, endereco: str, valor: str, form
   pdf.showPage()
   pdf.save()
 
-@router.post("/contratos")
+@router.get("/clientes/contratos", response_class=HTMLResponse)
+def exibir_pagina_contrato(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="criar_contrato.html",
+        context={"pagina_atual": "contratos"},
+        status_code=200
+    )
+
+@router.post("/clientes/contratos/criar")
 async def criar_contrato(request: Request):
+    from app.models.contratos import criar_contrato
+    from app.models.clientes import buscar_id_cliente
     data = await request.json()
-    chave = data.get("nome_completo")
-    cpf = ""
-    nome = ""
-    endereco = ""
-
-    with Session(engine) as session:
-        from app.models.clientes import Cliente
-        from app.models.produtos import Produto
-        statement = select(Cliente).where(Cliente.nome_completo == chave)
-        resultados = session.exec(statement).all()
-        for r in resultados:
-           cpf = r.cpf
-           nome_completo = r.nome_completo
-           endereco = r.endereco
-
-    gerar_contrato(nome_completo, cpf, endereco)
-
-    return HTTPException(detail=f"Contrato criado para o cliente: {nome}", status_code=200)
+    id_cliente = buscar_id_cliente(data.get("nome_completo"))
+    forma_pagamento = data.get("forma_pagamento")
+    valor = int(data.get("valor"))
+    return criar_contrato(id_cliente, valor, forma_pagamento)
 
 
 @router.post("/contratos/buscar")

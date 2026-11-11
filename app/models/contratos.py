@@ -1,4 +1,5 @@
 from sqlmodel import Session, select, Field, SQLModel, Relationship
+from fastapi import HTTPException
 from typing import Optional
 from app.database import engine
 from datetime import date
@@ -35,3 +36,15 @@ def buscar_id_contrato(nome: str):
         for r in resultados:
             r.id_contrato
         return resultados
+
+def criar_contrato(id_cliente: int, valor: int, forma_pagamento: str):
+    try:  
+        with Session(engine) as session:
+            contrato = Contratos(id_cliente=f"{id_cliente}",valor=f"{valor}", forma_pagamento=f"{forma_pagamento}")
+            session.add(contrato)
+            session.commit()
+            session.refresh(contrato)
+            raise HTTPException(detail="Cliente cadastrado", status_code="200")
+    except Exception as e:
+        erro = str(e).replace("\n", "").strip()
+        print(erro)
