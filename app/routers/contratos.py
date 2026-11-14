@@ -232,12 +232,21 @@ def gerar_contrato(nome_completo: str, cpf: str, endereco: str, valor: str, form
   pdf.showPage()
   pdf.save()
 
-@router.get("/clientes/contratos", response_class=HTMLResponse)
+@router.get("/clientes/contratos/criar", response_class=HTMLResponse)
 def exibir_pagina_contrato(request: Request):
     return templates.TemplateResponse(
         request=request,
         name="criar_contrato.html",
         context={"pagina_atual": "contratos"},
+        status_code=200
+    )
+
+@router.get("/clientes/contratos/buscar", response_class=HTMLResponse)
+async def pagina_produtos(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="buscar_contrato.html",
+        context={"pagina_atual": "produtos"},
         status_code=200
     )
 
@@ -252,9 +261,10 @@ async def criar_contrato(request: Request):
     return criar_contrato(id_cliente, valor, forma_pagamento)
 
 
-@router.post("/contratos/buscar")
+
+@router.post("/clientes/contratos/buscar")
 async def todos_contratos(request: Request):
-  from app.models.contratos import buscar_contratos
+  from app.models.contratos import retornar_contratos
   data = await request.json()
   q = data.get("busca")
-  return await buscar_contratos(q)
+  return retornar_contratos(q)

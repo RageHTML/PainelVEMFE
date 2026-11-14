@@ -14,6 +14,7 @@ body {
     padding: 0;
 }
 
+/* Sidebar */
 .sidebar {
     width: 240px;
     background-color: #ffffff;
@@ -21,6 +22,7 @@ body {
     flex-direction: column;
     padding: 20px 12px;
     transition: width 0.3s ease;
+    border-right: 1px solid #e2e8f0;
 }
 
 .sidebar.collapsed {
@@ -52,7 +54,7 @@ body {
     text-decoration: none;
     color: #5b7083;
     border-radius: 8px;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .nav-link:hover,
@@ -65,6 +67,7 @@ body {
     display: none;
 }
 
+/* Main Content */
 .main-content {
     flex: 1;
     padding: 30px;
@@ -73,27 +76,13 @@ body {
     align-items: stretch;
 }
 
-#notificacao-container {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 9999;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
+/* Navbar de Produtos Condicional */
 .nav-produto {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     gap: 24px;
-    
     width: 100%;
-    margin-top: 0;
-    margin-left: 0;
-    margin-right: 0;
-    
     background-color: #ffffff;
     border-radius: 12px;
     padding: 20px 24px;
@@ -123,6 +112,7 @@ body {
     border-radius: 8px;
 }
 
+/* Formulários Padrão */
 #form {
     background-color: #ffffff;
     width: 100%;
@@ -130,7 +120,6 @@ body {
     padding: 24px;
     border-radius: 12px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-
     display: flex;
     flex-wrap: wrap;
     align-items: flex-end;
@@ -143,6 +132,7 @@ label {
     font-weight: 700;
     margin-bottom: 8px;
     color: #0f172a;
+    width: 100%;
 }
 
 input[type="text"],
@@ -200,6 +190,49 @@ button[type="submit"]:focus {
     outline-offset: 2px;
 }
 
-br {
-    display: none;
+/* Container e Estilos de Notificação */
+#notificacao-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.notificacao {
+    background-color: #ffffff;
+    color: #0f172a;
+    padding: 16px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    font-size: 0.95rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 280px;
+    max-width: 400px;
+    border-left: 5px solid #0284c7;
+    animation: slideIn 0.3s ease-out forwards;
+}
+
+.notificacao.sucesso {
+    border-left-color: #10b981;
+}
+
+.notificacao.erro {
+    border-left-color: #ef4444;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }

@@ -17,7 +17,7 @@ class Cliente(SQLModel, table=True):
     numero: str
     bairro: str 
 
-    contratos: list["Contratos"] = Relationship(back_populates="cliente")
+    contrato: list["Contratos"] = Relationship(back_populates="cliente")
 
 
 async def salvar_cliente_banco(request: Request):

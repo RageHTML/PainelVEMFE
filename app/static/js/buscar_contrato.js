@@ -52,7 +52,7 @@ if (formulario) {
         let campos_obj = JSON.parse(campos_json)
         let status_code = 0
 
-        resposta = await fetch("/contratos/buscar", {
+        resposta = await fetch("/clientes/contratos/buscar", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: campos_json
@@ -62,12 +62,24 @@ if (formulario) {
 
         const dados = await resposta.json();
         status_code = resposta.status
+        let card = document.getElementById('card-resultados')
         console.log(dados)
+
+        dados.forEach((dados) => {
+
+            div = document.createElement("div")
+            div.setAttribute("id", "contrato-div")
+            nome_completo = document.createElement("a")
+            nome_completo.textContent = dados.nome_completo
+            div.appendChild(nome_completo)
+            card.appendChild(div)
+
+        });
 
         if (resposta.ok == false){
             exibirNotificacao(`${dados.detail}`, `${status_code}`, "error");
         } else {
-            exibirNotificacao("Cliente cadastrado com sucesso!", "200", "sucesso");
+            exibirNotificacao("Dados trazidos", "200", "sucesso");
             formulario.reset();
         }
     });
