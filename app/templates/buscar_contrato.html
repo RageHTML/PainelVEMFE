@@ -2,24 +2,24 @@
 {% set mostrar_nav_produto = true %}
 {% block title %}Novo Produto - PainelVF{% endblock %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="/static/css/buscar_contrato.css">
+{% endblock %}
 {% block extra_js %}
     <script src="/static/js/buscar_contrato.js" defer></script>
 {% endblock %}
 
 
 {% block content %}
-    <form method="post" id="form">
-        <div class="form-row">
-            <div class="input-group">
-                <label for="busca">Buscar cliente por nome ou CPF:</label>
-                <input type="text" id="busca" name="busca" list="lista_clientes" autocomplete="off" placeholder="Digite o nome...">
-                <datalist id="lista_clientes"></datalist>
-            </div>
-            <button type="submit">Enviar</button>
+    <form method="post" id="formulario-busca">
+        <div id="div-campo-busca">
+            <label for="busca">Buscar cliente por nome ou CPF:</label>
+            <input type="text" id="busca" name="busca" list="lista_clientes" autocomplete="off" placeholder="Digite o nome...">
+            <datalist id="lista_clientes"></datalist>
+            <div id="div-botao-busca"><button type="submit">Enviar</button></div>
         </div>
 
-        <div id="card-resultados">
-
-        </div>
+    
     </form>
+    <div id="card-resultados"></div>
 {% endblock %}

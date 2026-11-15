@@ -1,0 +1,38 @@
+#formulario-busca {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    
+    padding: 24px;
+    gap: 20px;
+ 
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  
+}
+
+#card-resultados {
+    background-color: #ffffff;
+    margin-top: 20px;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 20px;
+}
+
+#contrato-div {
+    background-color: #f3f3f3;
+    width: 100%;
+    max-width: 100%;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 20px;
+}

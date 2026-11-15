@@ -44,9 +44,6 @@ def retornar_contratos(nome: str):
             'data_pedido': c.data_pedido,
             'status': c.status
         })
-
-        
-
     return contratos_dict
 
         
