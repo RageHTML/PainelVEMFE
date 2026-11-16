@@ -221,11 +221,11 @@ def contrato_forum():
   for f in t['forum']:
     criar_texto(f, tipo_texto['1'])
    
-def gerar_contrato(nome_completo: str, cpf: str, endereco: str, valor: str, forma_de_pagamento: str):
+def gerar_contrato(nome_completo: str, cpf: str, endereco: str, valor: str, forma_de_pagamento: str, status: str):
   contrato_preambulo(f"{nome_completo}",f"{cpf}", f"{endereco}")
   contrato_objeto(texto_split)
   contrato_data_prazo("10/12/2026", "16:00", "Rua Lucas Borges da Silva, 431")
-  contrato_valor_pagamento("540", "Pix", "Quitado")
+  contrato_valor_pagamento(f"{valor}", f"{forma_de_pagamento}", f"{status}")
   contrato_responsabilidade()
   contrato_multa("07", "30")
   contrato_forum()
@@ -260,11 +260,23 @@ async def criar_contrato(request: Request):
     valor = int(data.get("valor"))
     return criar_contrato(id_cliente, valor, forma_pagamento)
 
-
-
 @router.post("/clientes/contratos/buscar")
 async def todos_contratos(request: Request):
   from app.models.contratos import retornar_contratos
   data = await request.json()
   q = data.get("busca")
   return retornar_contratos(q)
+
+@router.post("/clientes/contratos/gerar_contrato")
+async def gerar(request: Request):
+  data = await request.json()
+  gerar_contrato
+  (
+    data.get("nome_completo"), 
+    data.get("cpf"), 
+    data.get("endreco"), 
+    data.get("valor"), 
+    data.get("forma_pagamento"),
+    data.get("status")
+  )
+  return HTTPException(detail="sucesso", status_code=200)

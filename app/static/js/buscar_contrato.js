@@ -210,21 +210,39 @@ function criar_formulario_cliente(contrato_div){
    
 };
 
-function criar_div_cliente(nome_completo, status, data_pedido){
+function gerar_contrato(dados,botao_contrato){
+    botao_contrato.addEventListener("click", async (event) => {
+        try {
+                const resposta = await fetch(`/clientes/contratos/gerar_contrato`,{
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(dados)
+                });
+
+                const dados_back = await resposta.json();
+
+            } catch (erro) {
+                clientesEncontrados = null;
+                exibirNotificacao('Erro de conexão com o servidor', '400', "error");
+            }
+    })
+}
+
+function criar_div_cliente(dados){
     let card = document.getElementById('card-resultados')
     let contrato_div = document.createElement("div")
     contrato_div.setAttribute("id", "contrato-div")
     
     let p_nome_completo = document.createElement("p")
-    p_nome_completo.textContent = nome_completo
+    p_nome_completo.textContent = dados.nome_completo
     contrato_div.appendChild(p_nome_completo)
 
     let p_status = document.createElement("p")
-    p_status.textContent = status
+    p_status.textContent = dados.status
     contrato_div.appendChild(p_status)
 
     let p_data_pedido = document.createElement("p")
-    p_data_pedido.textContent = data_pedido
+    p_data_pedido.textContent = dados.data_pedido
     contrato_div.appendChild(p_data_pedido)
 
     let edicao_cliente = document.createElement("a")
@@ -245,6 +263,16 @@ function criar_div_cliente(nome_completo, status, data_pedido){
     edicao_produto.addEventListener("click", (event) => {
         event.preventDefault()
         criar_formulario_produto(contrato_div)
+    })
+
+    let botao_contrato = document.createElement("a")
+    botao_contrato.textContent = "📜"
+    botao_contrato.setAttribute("href", "")
+    contrato_div.appendChild(botao_contrato)
+
+    botao_contrato.addEventListener("click", (event) => {
+        event.preventDefault()
+        gerar_contrato(dados,botao_contrato)
     })
 
     card.appendChild(contrato_div)
@@ -276,7 +304,7 @@ if (formulario) {
         console.log(dados)
 
         dados.forEach((dados) => {
-            criar_div_cliente(dados.nome_completo, dados.status, dados.data_pedido)
+            criar_div_cliente(dados)
         });
 
         if (resposta.ok == false){
