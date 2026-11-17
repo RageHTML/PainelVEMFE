@@ -11,12 +11,16 @@ from reportlab.pdfgen import canvas
 from num2words import num2words
 from app.main import templates
 from datetime import datetime
-
+import re 
 router = APIRouter()
 
 def converter_numero_extenso(valor):
-  t = num2words(int(valor), lang='pt_BR')
-  return t
+  print(f"valor aqui: {valor}")
+  if valor == None:
+    return "sem valor"
+  else:
+    t = num2words(int(valor), lang='pt_BR')
+    return t
 
 def data_extenso():
     dt = datetime.now()
@@ -221,11 +225,11 @@ def contrato_forum():
   for f in t['forum']:
     criar_texto(f, tipo_texto['1'])
    
-def gerar_contrato(nome_completo: str, cpf: str, endereco: str, valor: str, forma_de_pagamento: str, status: str):
+def gerar_contrato(nome_completo: str, cpf: str, endereco: str):
   contrato_preambulo(f"{nome_completo}",f"{cpf}", f"{endereco}")
   contrato_objeto(texto_split)
   contrato_data_prazo("10/12/2026", "16:00", "Rua Lucas Borges da Silva, 431")
-  contrato_valor_pagamento(f"{valor}", f"{forma_de_pagamento}", f"{status}")
+  contrato_valor_pagamento("10", "pix", "pago")
   contrato_responsabilidade()
   contrato_multa("07", "30")
   contrato_forum()
@@ -269,14 +273,16 @@ async def todos_contratos(request: Request):
 
 @router.post("/clientes/contratos/gerar_contrato")
 async def gerar(request: Request):
-  data = await request.json()
-  gerar_contrato
-  (
-    data.get("nome_completo"), 
-    data.get("cpf"), 
-    data.get("endreco"), 
-    data.get("valor"), 
-    data.get("forma_pagamento"),
-    data.get("status")
-  )
-  return HTTPException(detail="sucesso", status_code=200)
+
+  campos_dict = await request.json()
+  chave_campos = campos_dict.keys()
+
+  for c in chave_campos:
+      campo = re.sub("_", " ", c)
+      conteudo_campo = campos_dict[f'{c}']
+
+      if conteudo_campo is None:
+        raise HTTPException(detail=f"{campo} Impossivel gerar um contrato com o valor nao definido", status_code=422)
+        
+  gerar_contrato(campos_dict.get("nome_completo"), campos_dict.get("cpf"), campos_dict.get("endereco"))
+  raise HTTPException(detail="sucesso", status_code=200)

@@ -210,22 +210,31 @@ function criar_formulario_cliente(contrato_div){
    
 };
 
-function gerar_contrato(dados,botao_contrato){
+function gerar_contrato(dados, botao_contrato) {
     botao_contrato.addEventListener("click", async (event) => {
+        event.preventDefault();
+
         try {
-                const resposta = await fetch(`/clientes/contratos/gerar_contrato`,{
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(dados)
-                });
+            let resposta = await fetch(`/clientes/contratos/gerar_contrato`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(dados)
+            });
 
-                const dados_back = await resposta.json();
+            let dados_back = await resposta.json();
 
-            } catch (erro) {
-                clientesEncontrados = null;
-                exibirNotificacao('Erro de conexão com o servidor', '400', "error");
+            if (!resposta.ok) {
+                exibirNotificacao(dados_back.detail, resposta.status, "error");
+                return;
             }
-    })
+            exibirNotificacao("Contrato gerado com sucesso!", "200", "success");
+
+        } catch (erro) {
+            console.error("Erro de conexão:", erro);
+            clientesEncontrados = null;
+            exibirNotificacao('Erro de conexão com o servidor', '400', "error");
+        }
+    });
 }
 
 function criar_div_cliente(dados){

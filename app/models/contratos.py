@@ -41,8 +41,17 @@ def retornar_contratos(nome: str):
     for c in contratos:
         contratos_dict.append({
             'nome_completo': c.cliente.nome_completo,
+            'nome_mae': c.cliente.nome_mae,
+            'cpf': c.cliente.cpf,
+            'data_nascimento': c.cliente.data_nascimento,
+            'endereco': c.cliente.endereco,
+            'numero': c.cliente.numero,
+            'bairro': c.cliente.bairro,
+            'status': c.status,
+            'valor': c.valor,
+            'forma_pagamento': c.forma_pagamento,
             'data_pedido': c.data_pedido,
-            'status': c.status
+            'data_entregue': c.data_entregue
         })
     return contratos_dict
 
