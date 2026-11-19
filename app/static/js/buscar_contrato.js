@@ -279,11 +279,8 @@ function criar_div_cliente(dados){
     botao_contrato.setAttribute("href", "")
     contrato_div.appendChild(botao_contrato)
 
-    botao_contrato.addEventListener("click", (event) => {
-        event.preventDefault()
-        gerar_contrato(dados,botao_contrato)
-    })
-
+    gerar_contrato(dados,botao_contrato)
+    
     card.appendChild(contrato_div)
 };
 

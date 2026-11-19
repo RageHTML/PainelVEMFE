@@ -282,7 +282,7 @@ async def gerar(request: Request):
       conteudo_campo = campos_dict[f'{c}']
 
       if conteudo_campo is None:
-        raise HTTPException(detail=f"{campo} Impossivel gerar um contrato com o valor nao definido", status_code=422)
+        raise HTTPException(detail=f"{campo} desse contrato esta vazio, prencha ele editando", status_code=422)
         
   gerar_contrato(campos_dict.get("nome_completo"), campos_dict.get("cpf"), campos_dict.get("endereco"))
   raise HTTPException(detail="sucesso", status_code=200)
