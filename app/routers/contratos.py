@@ -7,7 +7,6 @@ import re
 router = APIRouter()
 
 
-
 @router.get("/festas", response_class=HTMLResponse)
 def exibir_pagina_contrato(request: Request):
     return templates.TemplateResponse(
@@ -32,10 +31,11 @@ async def criar_contrato(request: Request):
     from app.models.clientes import buscar_id_cliente
     data = await request.json()
     id_cliente = buscar_id_cliente(data.get("nome_completo"))
+    valor = int(data.get("valor"))
     forma_pagamento = data.get("forma_pagamento")
     data_entregue = data.get("data_entregue")
-    valor = int(data.get("valor"))
-    return criar_contrato(id_cliente, valor, forma_pagamento, data_entregue)
+    descricao = data.get("descricao")
+    return criar_contrato(id_cliente, valor, forma_pagamento, data_entregue, descricao)
 
 @router.post("/clientes/contratos/buscar")
 async def todos_contratos(request: Request):

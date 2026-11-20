@@ -294,15 +294,16 @@ def buscar_id_contrato(nome: str):
             r.id_contrato
         return resultados
 
-def criar_contrato(id_cliente: int, valor: int, forma_pagamento: str, data_entregue: str):
-    from app.models.festas import Festa
+def criar_contrato(id_cliente: int, valor: int, forma_pagamento: str, data_entregue: str, descricao: str):
+    from app.models.festas import criar_festa
     try:  
         with Session(engine) as session:
             contrato = Contratos(id_cliente=f"{id_cliente}",valor=f"{valor}", forma_pagamento=f"{forma_pagamento}")
-            festa = Festa(data_entregue=data_entregue,contrato=contrato, contrato_id=contrato.id)
+            criar_festa(contrato=contrato, contrato_id=contrato.id, data_entregue=data_entregue, descricao=descricao)
             session.add(contrato)
             session.commit()
             session.refresh(contrato)
+            
             raise HTTPException(detail="Cliente cadastrado", status_code="200")
     except Exception as e:
         erro = str(e).replace("\n", "").strip()
