@@ -35,19 +35,13 @@
     </aside>
 
     <main class="main-content">
-        {% if mostrar_nav_clientes == true %}
+        {% if mostrar_nav_clientes %}
             <nav class="nav-produto">
                 <a href="/clientes">Novo Cliente</a>
-                <a href="/clientes/contratos/criar">Novo Contrato</a>
-                <a href="/clientes/contratos/buscar">Produtos do Cliente</a>
             </nav>
         {% endif %}
-        
-        {% block content %}{% endblock %}
-    </main>
 
-    <main class="main-content">
-        {% if mostrar_nav_festas == true %}
+        {% if mostrar_nav_festas %}
             <nav class="nav-produto">
                 <a href="/festas">Nova Festa</a>
                 <a href="/festas/buscar">Festas</a>
