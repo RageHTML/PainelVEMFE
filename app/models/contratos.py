@@ -238,7 +238,7 @@ def gerar_contrato(nome_completo: str, cpf: str,data_entregue: str,  endereco: s
 class Contratos(SQLModel, table=True):
     __tablename__ = "contratos"
     cliente: Optional["Cliente"] = Relationship(back_populates="contrato")
-    produto: list["Produto"] = Relationship(back_populates="contrato")
+    festa: list["Festa"] = Relationship(back_populates="contrato")
 
 
     id: int | None = Field(default=None, primary_key=True)
@@ -258,7 +258,7 @@ def buscar_contratos(nome: str):
             .where(Contratos.id_cliente == int(id_cliente))
             .options(
                 selectinload(Contratos.cliente),
-                selectinload(Contratos.produto)
+                selectinload(Contratos.festa)
             )
         )
 
@@ -295,11 +295,11 @@ def buscar_id_contrato(nome: str):
         return resultados
 
 def criar_contrato(id_cliente: int, valor: int, forma_pagamento: str, data_entregue: str):
-    from app.models.produtos import Produto
+    from app.models.festas import Festa
     try:  
         with Session(engine) as session:
             contrato = Contratos(id_cliente=f"{id_cliente}",valor=f"{valor}", forma_pagamento=f"{forma_pagamento}")
-            produto = Produto(data_entregue=data_entregue,contrato=contrato, contrato_id=contrato.id)
+            festa = Festa(data_entregue=data_entregue,contrato=contrato, contrato_id=contrato.id)
             session.add(contrato)
             session.commit()
             session.refresh(contrato)

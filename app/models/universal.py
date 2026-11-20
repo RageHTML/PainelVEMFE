@@ -17,6 +17,9 @@ def buscar_cpf(cpf: str):
            return r.cpf
 
 def limpar_e_recriar_banco():
-    SQLModel.metadata.drop_all(engine)
+    from sqlalchemy import text
+    with engine.begin() as conn:
+        conn.execute(text("DROP SCHEMA public CASCADE;"))
+        conn.execute(text("CREATE SCHEMA public;"))
     SQLModel.metadata.create_all(engine)
     print("Banco de dados limpo e recriado com sucesso!")

@@ -8,12 +8,12 @@ router = APIRouter()
 
 
 
-@router.get("/clientes/contratos/criar", response_class=HTMLResponse)
+@router.get("/festas/criar", response_class=HTMLResponse)
 def exibir_pagina_contrato(request: Request):
     return templates.TemplateResponse(
         request=request,
-        name="criar_contrato.html",
-        context={"pagina_atual": "contratos"},
+        name="festas.html",
+        context={"pagina_atual": "festas"},
         status_code=200
     )
 

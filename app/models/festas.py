@@ -4,22 +4,22 @@ from typing import Optional
 from app.database import engine
 from datetime import date
 
-class Produto(SQLModel, table=True):
-    __tablename__ = "produto"
+class Festa(SQLModel, table=True):
+    __tablename__ = "festa"
 
     id: int | None = Field(default=None, primary_key=True)
     descricao: str | None = Field(default=None)
     
     contrato_id: int | None = Field(default=None, foreign_key="contratos.id")
-    contrato: Optional["Contratos"] = Relationship(back_populates="produto")
+    contrato: Optional["Contratos"] = Relationship(back_populates="festa")
 
 
 def salvar_descricao(descricao: str, id: str):
-    db_produto = Produto(descricao=f"{descricao}")
+    descricao = Festa(descricao=f"{descricao}")
     with Session(engine) as session:
-        session.add(db_produto)
+        session.add(descricao)
         session.commit()
-        session.refresh(db_produto)
+        session.refresh(descricao)
     return HTTPException(detail="sucesso", status_code="200")
 
 
@@ -36,11 +36,11 @@ async def salvar_produto_banco(request: Request):
             salvar_descricao(conteudo, id_cliente)
         else:
          with Session(engine) as session:
-            db_produto = Produto.model_validate(data)
-            session.add(db_produto)
+            festa = Festa.model_validate(data)
+            session.add(festa)
             session.commit()
-            session.refresh(db_produto)
-            return db_produto
+            session.refresh(festa)
+            return festa
 
    
 
