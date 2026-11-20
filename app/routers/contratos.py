@@ -8,7 +8,7 @@ router = APIRouter()
 
 
 
-@router.get("/festas/criar", response_class=HTMLResponse)
+@router.get("/festas", response_class=HTMLResponse)
 def exibir_pagina_contrato(request: Request):
     return templates.TemplateResponse(
         request=request,
@@ -17,11 +17,11 @@ def exibir_pagina_contrato(request: Request):
         status_code=200
     )
 
-@router.get("/clientes/contratos/buscar", response_class=HTMLResponse)
+@router.get("/festas/buscar_festas", response_class=HTMLResponse)
 async def pagina_produtos(request: Request):
     return templates.TemplateResponse(
         request=request,
-        name="buscar_contrato.html",
+        name="buscar_festas.html",
         context={"pagina_atual": "produtos"},
         status_code=200
     )
