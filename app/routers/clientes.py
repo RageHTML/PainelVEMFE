@@ -14,7 +14,7 @@ def pagina_clientes(request: Request):
     )
 
 
-@router.post("/clientes/buscar")
+@router.post("/clientes/buscar_nome_completo")
 async def buscar_cliente(request: Request):
     from app.models.clientes import buscar_nome_completo
     data = await request.json()

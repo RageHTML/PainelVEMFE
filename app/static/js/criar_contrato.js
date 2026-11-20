@@ -9,7 +9,7 @@ if (campo_busca) {
 
         if (texto.length >= 1) {
             try {
-                const resposta = await fetch(`/clientes/buscar`,{
+                const resposta = await fetch(`/clientes/buscar_nome_completo`,{
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ nome: texto })
