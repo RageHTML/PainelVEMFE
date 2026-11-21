@@ -54,19 +54,16 @@ if (formulario) {
 
        
 
-        resposta = await fetch("/clientes/contratos/criar", {
+        resposta = await fetch("/festas", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: campos_json
         });
 
-        console.log(campos_json)
-
         const dados = await resposta.json();
-        status_code = resposta.status
 
         if (resposta.ok == false){
-            exibirNotificacao(`${dados.detail}`, `${status_code}`, "error");
+            exibirNotificacao(`${dados.detail}`, `${dados.status_code}`, "error");
         } else {
             exibirNotificacao("Cliente cadastrado com sucesso!", "200", "sucesso");
             formulario.reset();

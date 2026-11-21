@@ -1,50 +1,17 @@
-from datetime import datetime
-from fastapi import APIRouter, Request, HTTPException
-from fastapi.responses import HTMLResponse
-from app.main import templates
 
+
+from fastapi import APIRouter, Request, HTTPException
 import re 
 router = APIRouter()
 
-
-@router.get("/festas", response_class=HTMLResponse)
-def exibir_pagina_contrato(request: Request):
-    return templates.TemplateResponse(
-        request=request,
-        name="festas.html",
-        context={"pagina_atual": "festas"},
-        status_code=200
-    )
-
-@router.get("/festas/buscar_festas", response_class=HTMLResponse)
-async def pagina_produtos(request: Request):
-    return templates.TemplateResponse(
-        request=request,
-        name="buscar_festas.html",
-        context={"pagina_atual": "produtos"},
-        status_code=200
-    )
-
-@router.post("/clientes/contratos/criar")
-async def criar_contrato(request: Request):
-    from app.models.contratos import criar_contrato
-    from app.models.clientes import buscar_id_cliente
-    data = await request.json()
-    id_cliente = buscar_id_cliente(data.get("nome_completo"))
-    valor = int(data.get("valor"))
-    forma_pagamento = data.get("forma_pagamento")
-    data_entregue = data.get("data_entregue")
-    descricao = data.get("descricao")
-    return criar_contrato(id_cliente, valor, forma_pagamento, data_entregue, descricao)
-
-@router.post("/clientes/contratos/buscar")
+@router.post("/contratos/buscar")
 async def todos_contratos(request: Request):
   from app.models.contratos import retornar_contratos
   data = await request.json()
   q = data.get("busca")
   return retornar_contratos(q)
 
-@router.post("/clientes/contratos/gerar_contrato")
+@router.post("/contratos/gerar")
 async def gerar(request: Request):
   from app.models.contratos import gerar_contrato
 

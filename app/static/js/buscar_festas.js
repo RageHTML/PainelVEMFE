@@ -215,7 +215,7 @@ function gerar_contrato(dados, botao_contrato) {
         event.preventDefault();
 
         try {
-            let resposta = await fetch(`/clientes/contratos/gerar_contrato`, {
+            let resposta = await fetch(`/contratos/gerar`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(dados)
@@ -297,7 +297,7 @@ if (formulario) {
         let campos_obj = JSON.parse(campos_json)
         let status_code = 0
 
-        resposta = await fetch("/clientes/contratos/buscar", {
+        resposta = await fetch("/contratos/buscar", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: campos_json

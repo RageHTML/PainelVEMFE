@@ -13,7 +13,6 @@ def pagina_clientes(request: Request):
         status_code=200
     )
 
-
 @router.post("/clientes/buscar_nome_completo")
 async def buscar_cliente(request: Request):
     from app.models.clientes import buscar_nome_completo

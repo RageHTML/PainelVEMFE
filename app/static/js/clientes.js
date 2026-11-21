@@ -8,7 +8,6 @@ async function obterFormulario(event) {
     let campos = Object.fromEntries(campos_iterator)
     let campos_json = JSON.stringify(campos)
     let campos_obj = JSON.parse(campos_json)
-    console.log(campos_obj)
     let status_code = 0
 
     resposta = await fetch("/clientes", {
@@ -18,11 +17,9 @@ async function obterFormulario(event) {
     });
 
     const dados = await resposta.json();
-    status_code = resposta.status
-    console.log(dados)
 
     if (resposta.ok == false){
-        exibirNotificacao(`${dados.detail}`, `${status_code}`, "error");
+        exibirNotificacao(`${dados.detail}`, `${dados.status_code}`, "error");
     } else {
         exibirNotificacao("Cliente cadastrado com sucesso!", "200", "sucesso");
         formulario.reset();

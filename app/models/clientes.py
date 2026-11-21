@@ -26,6 +26,8 @@ async def salvar_cliente_banco(request: Request):
    campos_dict = await request.json()
    chave_campos = campos_dict.keys()
 
+   print(chave_campos)
+
    for c in chave_campos:
       campo = re.sub("_", " ", c)
       conteudo_campo = campos_dict[f'{c}']
