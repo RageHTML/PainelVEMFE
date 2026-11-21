@@ -9,7 +9,7 @@ templates = Jinja2Templates(directory="app/templates")
 from app.routers import clientes, contratos, raiz, festas
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
-#limpar_e_recriar_banco()
+limpar_e_recriar_banco()
 
 app.include_router(clientes.router)
 app.include_router(contratos.router)

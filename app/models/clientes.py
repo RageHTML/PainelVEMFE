@@ -21,7 +21,7 @@ class Cliente(SQLModel, table=True):
 
 
 async def salvar_cliente_banco(request: Request):
-   from app.models.universal import buscar_cpf
+   from app.models.universal import buscar_cpf, transformar_date
    from app.models.contratos import Contratos
    campos_dict = await request.json()
    chave_campos = campos_dict.keys()
@@ -46,6 +46,9 @@ async def salvar_cliente_banco(request: Request):
          campos_dict[c] = limpo
          if len (limpo) < 3:
             raise HTTPException(detail=f"O campo {campo} deve conter ao menos 3 caracteres.", status_code=422)
+      elif c == "data_nascimento":
+         campos_dict[c] = transformar_date(conteudo_campo)
+         
       
       if conteudo_campo == "":
          raise HTTPException(detail=f"O campo {campo} não pode estar vazio.", status_code=422)
@@ -56,15 +59,6 @@ async def salvar_cliente_banco(request: Request):
       with Session(engine) as session:
          db_cliente = Cliente.model_validate(campos_dict)
          session.add(db_cliente)
-         session.commit()
-         session.refresh(db_cliente)
-
-         db_contrato = Contratos(
-            id_cliente=db_cliente.id,
-            status="Pendente"
-         )
-         
-         session.add(db_contrato)
          session.commit()
          session.refresh(db_cliente)
          return db_cliente

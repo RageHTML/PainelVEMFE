@@ -245,7 +245,7 @@ class Contratos(SQLModel, table=True):
     id_cliente: int | None = Field(default=None, foreign_key="cliente.id")
     valor: float | None
     forma_pagamento: str | None = Field(default=None)
-    status: str | None = Field(default="pendente")
+    status: str | None = Field(default=None)
     data_pedido: date | None = Field()
     data_entregue: date | None = Field(default=None)
 
@@ -299,10 +299,10 @@ def criar_contrato(id_cliente: int, valor: int, forma_pagamento: str, data_entre
     try:  
         with Session(engine) as session:
             contrato = Contratos(id_cliente=f"{id_cliente}",valor=f"{valor}", forma_pagamento=f"{forma_pagamento}")
-            criar_festa(contrato, contrato.id, data_entregue, descricao)
             session.add(contrato)
             session.commit()
             session.refresh(contrato)
+            criar_festa(contrato, contrato.id, data_entregue, descricao)
             raise HTTPException(detail="Cliente cadastrado", status_code="200")
     except Exception as e:
         erro = str(e).replace("\n", "").strip()

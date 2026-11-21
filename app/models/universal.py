@@ -1,6 +1,10 @@
 from app.database import engine
 from sqlmodel import Session, select, SQLModel
 from app.models.clientes import Cliente
+from datetime import datetime
+
+def transformar_date(data: str):
+    return datetime.strptime(data, "%Y-%m-%d").date()
         
 def buscar_dados_banco(nome: str):
     with Session(engine) as session:
