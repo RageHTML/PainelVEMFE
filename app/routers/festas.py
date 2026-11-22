@@ -27,6 +27,7 @@ async def pagina_produtos(request: Request):
 async def criar_festa(request: Request):
     from app.models.contratos import criar_contrato
     from app.models.clientes import buscar_id_cliente
+    from app.models.universal import transformar_date
     data = await request.json()
     id_cliente = buscar_id_cliente(data.get("nome_completo"))
     valor = int(data.get("valor"))

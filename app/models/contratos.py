@@ -12,6 +12,7 @@ from reportlab.lib.pagesizes import A4
 from sqlmodel import Session, select
 from reportlab.pdfgen import canvas
 from num2words import num2words
+from datetime import datetime
 
 def converter_numero_extenso(valor):
   print(f"valor aqui: {valor}")
@@ -79,7 +80,7 @@ titulos_clasulas = {
     '6': 'CLÁUSULA 6ª – FORO',
 }
 
-def texto_clasulas(cliente=None, codigo=None, endereco=None, data=None, hora=None, local=None, valor=None, forma_de_pagamento=None, estado=None, tempo=None, porcentagem=None, data_contrato=None):
+def texto_clasulas(cliente=None, codigo=None, endereco=None, numero=None, data=None, hora=None, local=None, valor=None, forma_de_pagamento=None, estado=None, tempo=None, porcentagem=None, data_contrato=None):
   dict_textos = {
       'preambulo': (
           f"Pelo presente instrumento particular, de um lado, <b>VEM FESTEJAR "
@@ -100,7 +101,7 @@ def texto_clasulas(cliente=None, codigo=None, endereco=None, data=None, hora=Non
       ),
       'data_prazo': (
         f"O evento objeto deste contrato será realizado na data de "
-        f"<b>{data}</b>, às <b>{hora}</b>, no endereço <b>{local}</b>, "
+        f"<b>{data}</b>, às <b>{hora}</b>, no endereço <b>{endereco}, {numero}</b>, "
         f"englobando a montagem do cenário e a prestação dos serviços."
       ),
       'valor_pagemento': (
@@ -174,7 +175,7 @@ def criar_texto(texto, style):
   pdf_y -= y_restante + 14
   paragrafo.drawOn(pdf, pdf_x, pdf_y)
 
-def contrato_preambulo(cliente, codigo, endereco):
+def contrato_preambulo(cliente, codigo, endereco, numero):
   t = texto_clasulas(cliente=cliente, codigo=codigo, endereco=endereco)
   criar_texto(t['preambulo'], tipo_texto["1"])
 
@@ -189,11 +190,11 @@ def contrato_objeto(items):
   else:
     return None
 
-def contrato_data_prazo(data, hora, local):
-  if not data or not hora or not local:
+def contrato_data_prazo(data, hora, endereco, numero, ):
+  if not data or not hora or not endereco or not numero:
     return None
   else:
-    t = texto_clasulas(data=data, hora=hora, local=local)
+    t = texto_clasulas(data=data, hora=hora, endereco=endereco, numero=numero)
     criar_texto(f"<b>{titulos_clasulas['2']}</b>", tipo_texto["2"])
     criar_texto(t['data_prazo'], tipo_texto["1"])
 
@@ -245,7 +246,7 @@ class Contratos(SQLModel, table=True):
     id_cliente: int | None = Field(default=None, foreign_key="cliente.id")
     valor: float | None
     forma_pagamento: str | None = Field(default=None)
-    status: str | None = Field(default=None)
+    status: str | None = Field(default="pendente")
     data_pedido: date | None = Field()
     data_entregue: date | None = Field(default=None)
 
@@ -296,14 +297,16 @@ def buscar_id_contrato(nome: str):
 
 def criar_contrato(id_cliente: int, valor: int, forma_pagamento: str, data_entregue: str, descricao: str):
     from app.models.festas import criar_festa
+    from app.models.universal import transformar_date
     try:  
         with Session(engine) as session:
-            contrato = Contratos(id_cliente=f"{id_cliente}",valor=f"{valor}", forma_pagamento=f"{forma_pagamento}")
+            contrato = Contratos(id_cliente=id_cliente, valor=valor, forma_pagamento=forma_pagamento, data_entregue=transformar_date(data_entregue))
             session.add(contrato)
             session.commit()
             session.refresh(contrato)
-            criar_festa(contrato, contrato.id, data_entregue, descricao)
-            raise HTTPException(detail="Cliente cadastrado", status_code="200")
+
+        criar_festa(contrato, contrato.id, descricao)
+        raise HTTPException(detail="Cliente cadastrado", status_code="200")
     except Exception as e:
         erro = str(e).replace("\n", "").strip()
         print(erro)

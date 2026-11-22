@@ -22,6 +22,8 @@ async def gerar(request: Request):
       campo = re.sub("_", " ", c)
       conteudo_campo = campos_dict[f'{c}']
 
+      print(campo, conteudo_campo)
+
       if conteudo_campo is None:
         raise HTTPException(detail=f"o {campo} esta vazio, e preciso prenechelo editando", status_code=422)
         

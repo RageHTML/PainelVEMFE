@@ -27,5 +27,5 @@ function exibirNotificacao(mensagem, codigo, tipo) {
         setTimeout(() => {
             notificacao.remove();
         }, 400); 
-    }, 3000);
+    }, 2000);
 }

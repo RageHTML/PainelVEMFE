@@ -50,9 +50,6 @@ if (formulario) {
         let campos = Object.fromEntries(campos_iterator)
         let campos_json = JSON.stringify(campos)
         let campos_obj = JSON.parse(campos_json)
-        let status_code = 0
-
-       
 
         resposta = await fetch("/festas", {
             method: "POST",
