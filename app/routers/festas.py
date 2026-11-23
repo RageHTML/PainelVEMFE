@@ -29,9 +29,14 @@ async def criar_festa(request: Request):
     from app.models.clientes import buscar_id_cliente
     from app.models.universal import transformar_date
     data = await request.json()
-    id_cliente = buscar_id_cliente(data.get("nome_completo"))
-    valor = int(data.get("valor"))
-    forma_pagamento = data.get("forma_pagamento")
-    data_entregue = data.get("data_entregue")
-    descricao = data.get("descricao")
-    return criar_contrato(id_cliente, valor, forma_pagamento, data_entregue, descricao)
+   
+    return criar_contrato(
+        id_cliente = buscar_id_cliente(data.get("nome_completo")),
+        endereco_festa = data.get("endereco"),
+        numero_festa = data.get("numero"),
+        bairro_festa = data.get("bairro"),
+        valor = int(data.get("valor")),
+        forma_pagamento = data.get("forma_pagamento"),
+        data_entregue = data.get("data_entregue"),
+        descricao = data.get("descricao")
+    )

@@ -15,10 +15,10 @@ class Festa(SQLModel, table=True):
     contrato_id: int | None = Field(default=None, foreign_key="contratos.id")
     contrato: Optional["Contratos"] = Relationship(back_populates="festa")
 
-def criar_festa(contrato: Contratos, contrato_id: int, descricao: str):
+def criar_festa(contrato: Contratos, contrato_id: int, endereco_festa: str, numero_festa: str, bairro_festa: str, descricao: str):
     try:  
         with Session(engine) as session:
-            festa = Festa(contrato=contrato, contrato_id=contrato_id, descricao=descricao)
+            festa = Festa(contrato=contrato, contrato_id=contrato_id, endereco=endereco_festa, numero=numero_festa, bairro=bairro_festa, descricao=descricao)
             session.add(festa)
             session.commit()
             session.refresh(festa)

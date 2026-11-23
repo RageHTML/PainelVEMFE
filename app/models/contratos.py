@@ -294,7 +294,7 @@ def buscar_id_contrato(nome: str):
             r.id_contrato
         return resultados
 
-def criar_contrato(id_cliente: int, valor: int, forma_pagamento: str, data_entregue: str, descricao: str):
+def criar_contrato(id_cliente: int, valor: int, endereco_festa: str, numero_festa: str, bairro_festa: str, forma_pagamento: str, data_entregue: str, descricao: str):
     from app.models.festas import criar_festa
     from app.models.universal import transformar_date
     try:  
@@ -304,7 +304,7 @@ def criar_contrato(id_cliente: int, valor: int, forma_pagamento: str, data_entre
             session.commit()
             session.refresh(contrato)
 
-        criar_festa(contrato, contrato.id, descricao)
+        criar_festa(contrato, contrato.id, endereco_festa, numero_festa, bairro_festa,descricao)
         raise HTTPException(detail="Cliente cadastrado", status_code="200")
     except Exception as e:
         erro = str(e).replace("\n", "").strip()
