@@ -276,6 +276,7 @@ def retornar_contratos(nome: str):
             'data_nascimento': c.cliente.data_nascimento,
             'endereco': c.cliente.endereco,
             'numero': c.cliente.numero,
+            'bairro': c.cliente.bairro,
             'status': c.status,
             'valor': c.valor,
             'forma_pagamento': c.forma_pagamento,
