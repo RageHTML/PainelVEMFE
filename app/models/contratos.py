@@ -15,7 +15,6 @@ from num2words import num2words
 from datetime import datetime
 
 def converter_numero_extenso(valor):
-  print(f"valor aqui: {valor}")
   if valor == None:
     return "sem valor"
   else:

@@ -9,6 +9,9 @@ class Festa(SQLModel, table=True):
 
     id: int | None = Field(default=None, primary_key=True)
     descricao: str | None = Field(default=None)
+    endereco: str | None = Field(default=None)
+    numero: str | None = Field(default=None)
+    bairro: str  | None = Field(default=None)
     contrato_id: int | None = Field(default=None, foreign_key="contratos.id")
     contrato: Optional["Contratos"] = Relationship(back_populates="festa")
 

@@ -9,13 +9,13 @@ class Cliente(SQLModel, table=True):
     __tablename__ = "cliente"
 
     id: int | None = Field(default=None, primary_key=True)
-    nome_completo: str
-    nome_mae: str
+    nome_completo: str | None = Field(default=None)
+    nome_mae: str | None = Field(default=None)
     cpf: str = Field(unique=True)
-    data_nascimento: date
-    endereco: str
-    numero: str
-    bairro: str 
+    data_nascimento: date | None = Field(default=None)
+    endereco: str | None = Field(default=None)
+    numero: str | None = Field(default=None)
+    bairro: str  | None = Field(default=None)
 
     contrato: list["Contratos"] = Relationship(back_populates="cliente")
 
