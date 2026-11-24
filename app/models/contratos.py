@@ -225,11 +225,35 @@ def contrato_forum():
   for f in t['forum']:
     criar_texto(f, tipo_texto['1'])
    
-def gerar_contrato(nome_completo: str, cpf: str,data_entregue: str,  endereco: str, numero: str, valor: str, forma_pagamento: str, status: str ):
-  contrato_preambulo(f"{nome_completo}",f"{cpf}", f"{endereco}")
+async def gerar_contrato(request: Request):
+  campos_dict = await request.json()
+  print(campos_dict)
+
+
+  contrato_preambulo(
+    campos_dict.get("nome_completo"),
+    campos_dict.get("cpf"),
+    campos_dict.get("bairro"),
+    campos_dict.get("endereco"),
+    campos_dict.get("numero")
+  )
+
   contrato_objeto(texto_split)
-  contrato_data_prazo(f"{data_entregue}", "16:00", f"{endereco}", f"{numero}")
-  contrato_valor_pagamento(f"{valor}", f"{forma_pagamento}", f"{status}")
+
+  contrato_data_prazo(
+    campos_dict.get("data_entregue"), 
+    "16:00", 
+    campos_dict.get("bairro_festa"),
+    campos_dict.get("endereco_festa"), 
+    campos_dict.get("numero_festa")
+  )
+
+  contrato_valor_pagamento(
+    campos_dict.get("valor"),
+    campos_dict.get("forma_pagamento"),
+    campos_dict.get("status")
+  )
+
   contrato_responsabilidade()
   contrato_multa("07", "30")
   contrato_forum()
