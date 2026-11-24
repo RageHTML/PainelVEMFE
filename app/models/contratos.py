@@ -1,6 +1,6 @@
 from sqlmodel import Session, select, Field, SQLModel, Relationship
 from sqlalchemy.orm import selectinload
-from fastapi import HTTPException
+from fastapi import HTTPException, Request
 from typing import Optional
 from app.database import engine
 from datetime import date
@@ -13,6 +13,7 @@ from sqlmodel import Session, select
 from reportlab.pdfgen import canvas
 from num2words import num2words
 from datetime import datetime
+import re
 
 def converter_numero_extenso(valor):
   if valor == None:
@@ -79,7 +80,7 @@ titulos_clasulas = {
     '6': 'CLÁUSULA 6ª – FORO',
 }
 
-def texto_clasulas(cliente=None, codigo=None, endereco=None, numero=None, data=None, hora=None, local=None, valor=None, forma_de_pagamento=None, estado=None, tempo=None, porcentagem=None, data_contrato=None):
+def texto_clasulas(cliente=None, codigo=None,bairro=None,  endereco=None, numero=None, data=None, hora=None, bairro_festa=None,endereco_festa=None,numero_festa=None,local=None, valor=None, forma_de_pagamento=None, estado=None, tempo=None, porcentagem=None):
   dict_textos = {
       'preambulo': (
           f"Pelo presente instrumento particular, de um lado, <b>VEM FESTEJAR "
@@ -88,7 +89,7 @@ def texto_clasulas(cliente=None, codigo=None, endereco=None, numero=None, data=N
           f"doravante denominada <b>CONTRATADA</b>, e, de outro lado, "
           f"<b>{cliente}</b>, inscrito(a) no CPF/CNPJ sob o nº "
           f"<b>{codigo}</b>, residente e domiciliado(a) na "
-          f"<b>{endereco}</b>, doravante denominado(a) <b>CONTRATANTE</b>, "
+          f"<b>{bairro}, {endereco}, {numero}</b>, doravante denominado(a) <b>CONTRATANTE</b>, "
           f"têm entre si justo e contratado o presente instrumento de "
           f"prestação de serviços e locação de bens móveis, que se regerá "
           f"pelas cláusulas e condições a seguir expostas."
@@ -100,7 +101,7 @@ def texto_clasulas(cliente=None, codigo=None, endereco=None, numero=None, data=N
       ),
       'data_prazo': (
         f"O evento objeto deste contrato será realizado na data de "
-        f"<b>{data}</b>, às <b>{hora}</b>, no endereço <b>{endereco}, {numero}</b>, "
+        f"<b>{data}</b>, às <b>{hora}</b>, no endereço <b>{bairro_festa},{endereco_festa}, {numero_festa}</b>, "
         f"englobando a montagem do cenário e a prestação dos serviços."
       ),
       'valor_pagemento': (
@@ -151,7 +152,7 @@ def texto_clasulas(cliente=None, codigo=None, endereco=None, numero=None, data=N
           "efeito legal."
         ),
         (
-          f"<b>João Pessoa/PB, {data_contrato}.</b>"
+          f"<b>João Pessoa/PB, {datetime.today().date()}.</b>"
         ),
       ],
   }
@@ -174,8 +175,8 @@ def criar_texto(texto, style):
   pdf_y -= y_restante + 14
   paragrafo.drawOn(pdf, pdf_x, pdf_y)
 
-def contrato_preambulo(cliente, codigo, endereco, numero):
-  t = texto_clasulas(cliente=cliente, codigo=codigo, endereco=endereco)
+def contrato_preambulo(cliente, codigo, bairro, endereco, numero):
+  t = texto_clasulas(cliente=cliente, codigo=codigo, bairro=bairro, endereco=endereco, numero=numero)
   criar_texto(t['preambulo'], tipo_texto["1"])
 
 def contrato_objeto(items):
@@ -189,11 +190,11 @@ def contrato_objeto(items):
   else:
     return None
 
-def contrato_data_prazo(data, hora, endereco, numero, ):
-  if not data or not hora or not endereco or not numero:
+def contrato_data_prazo(data, hora, bairro_festa, endereco_festa, numero_festa, ):
+  if not data or not hora or not bairro_festa or not endereco_festa:
     return None
   else:
-    t = texto_clasulas(data=data, hora=hora, endereco=endereco, numero=numero)
+    t = texto_clasulas(data=data, hora=hora, bairro_festa=bairro_festa, endereco_festa=endereco_festa, numero_festa=numero_festa)
     criar_texto(f"<b>{titulos_clasulas['2']}</b>", tipo_texto["2"])
     criar_texto(t['data_prazo'], tipo_texto["1"])
 
@@ -270,6 +271,7 @@ def retornar_contratos(nome: str):
     contratos_dict = []
     for c in contratos:
         contratos_dict.append({
+            'id_cliente': c.cliente.id,
             'nome_completo': c.cliente.nome_completo,
             'nome_mae': c.cliente.nome_mae,
             'cpf': c.cliente.cpf,
@@ -280,7 +282,10 @@ def retornar_contratos(nome: str):
             'status': c.status,
             'valor': c.valor,
             'forma_pagamento': c.forma_pagamento,
-            'data_entregue': c.data_entregue
+            'data_entregue': c.data_entregue,
+            'bairro_festa': c.festa.bairro,
+            'endereco_festa': c.festa.endereco,
+            'numero_festa': c.festa.numero,
         })
     return contratos_dict
 
@@ -295,17 +300,41 @@ def buscar_id_contrato(nome: str):
             r.id_contrato
         return resultados
 
-def criar_contrato(id_cliente: int, valor: int, endereco_festa: str, numero_festa: str, bairro_festa: str, forma_pagamento: str, data_entregue: str, descricao: str):
+async def criar_contrato(request: Request):
     from app.models.festas import criar_festa
     from app.models.universal import transformar_date
+    from app.models.clientes import buscar_id_cliente
+    
+    campos_dict = await request.json()
+    chave_campos = campos_dict.keys()
+    
+    for c in chave_campos:
+      campo = re.sub("_", " ", c)
+      conteudo_campo = campos_dict[f'{c}']
+
+      if conteudo_campo is None:
+        raise HTTPException(detail=f"o {campo} esta vazio, e preciso prenechelo editando", status_code=422)
+    
     try:  
         with Session(engine) as session:
-            contrato = Contratos(id_cliente=id_cliente, valor=valor, forma_pagamento=forma_pagamento, data_entregue=transformar_date(data_entregue))
+            contrato = Contratos(
+               id_cliente=buscar_id_cliente(campos_dict.get("nome_completo")), 
+               valor=campos_dict.get("valor"), 
+               forma_pagamento=campos_dict.get("forma_pagamento"), 
+               data_entregue=transformar_date(campos_dict.get("data_entregue"))
+              )
             session.add(contrato)
             session.commit()
             session.refresh(contrato)
 
-        criar_festa(contrato, contrato.id, endereco_festa, numero_festa, bairro_festa,descricao)
+        criar_festa(
+          contrato=contrato,
+          contrato_id=contrato.id,
+          bairro_festa=campos_dict.get("bairro"),
+          endereco_festa=campos_dict.get("endereco"), 
+          numero_festa=campos_dict.get("numero"), 
+          descricao=campos_dict.get("descricao")
+        )
         raise HTTPException(detail="Cliente cadastrado", status_code="200")
     except Exception as e:
         erro = str(e).replace("\n", "").strip()

@@ -306,15 +306,13 @@ if (formulario) {
     
 
         const dados = await resposta.json();
-        status_code = resposta.status
-        console.log(dados)
 
         dados.forEach((dados) => {
             criar_div_cliente(dados)
         });
 
         if (resposta.ok == false){
-            exibirNotificacao(`${dados.detail}`, `${status_code}`, "error");
+            exibirNotificacao(`${dados.detail}`, `${dados.status_code}`, "error");
         } else {
             exibirNotificacao("Dados trazidos", "200", "sucesso");
             formulario.reset();
