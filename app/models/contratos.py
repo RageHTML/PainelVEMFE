@@ -239,7 +239,7 @@ def gerar_contrato(nome_completo: str, cpf: str,data_entregue: str,  endereco: s
 class Contratos(SQLModel, table=True):
     __tablename__ = "contratos"
     cliente: Optional["Cliente"] = Relationship(back_populates="contrato")
-    festa: list["Festa"] = Relationship(back_populates="contrato")
+    festa: Optional["Festa"] = Relationship(back_populates="contrato")
 
 
     id: int | None = Field(default=None, primary_key=True)
@@ -285,7 +285,7 @@ def retornar_contratos(nome: str):
             'data_entregue': c.data_entregue,
             'bairro_festa': c.festa.bairro,
             'endereco_festa': c.festa.endereco,
-            'numero_festa': c.festa.numero,
+            'numero_festa': c.festa.numero
         })
     return contratos_dict
 

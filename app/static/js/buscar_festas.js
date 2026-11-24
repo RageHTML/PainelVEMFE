@@ -303,9 +303,8 @@ if (formulario) {
             body: campos_json
         });
 
-    
-
         const dados = await resposta.json();
+        console.log(dados)
 
         dados.forEach((dados) => {
             criar_div_cliente(dados)
