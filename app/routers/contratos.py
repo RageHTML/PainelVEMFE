@@ -12,7 +12,7 @@ async def todos_contratos(request: Request):
   return retornar_contratos(q)
 
 @router.post("/contratos/gerar")
-def gerar(request: Request):
+async def gerar(request: Request):
   from app.models.contratos import gerar_contrato
-  gerar_contrato(request)
+  await gerar_contrato(request)
   raise HTTPException(detail="sucesso", status_code=200)

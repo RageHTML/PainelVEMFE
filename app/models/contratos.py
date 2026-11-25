@@ -80,7 +80,7 @@ titulos_clasulas = {
     '6': 'CLÁUSULA 6ª – FORO',
 }
 
-def texto_clasulas(cliente=None, codigo=None,bairro=None,  endereco=None, numero=None, data=None, hora=None, bairro_festa=None,endereco_festa=None,numero_festa=None,local=None, valor=None, forma_de_pagamento=None, estado=None, tempo=None, porcentagem=None):
+def texto_clasulas(cliente=None, codigo=None,bairro=None,  endereco=None, numero=None, data=None, hora=None, bairro_festa=None,endereco_festa=None,numero_festa=None,local=None, valor=None, forma_de_pagamento=None, estado=None, tempo=None, porcentagem=None, data_contrato=None):
   dict_textos = {
       'preambulo': (
           f"Pelo presente instrumento particular, de um lado, <b>VEM FESTEJAR "
