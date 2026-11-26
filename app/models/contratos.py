@@ -15,6 +15,11 @@ from num2words import num2words
 from datetime import datetime
 import re
 
+def nome_ortografico(t):
+   nome_t = re.split(r"\s+", texto.strip())
+   print(nome_t)
+   return t
+
 def converter_numero_extenso(valor):
   if valor == None:
     return "sem valor"
@@ -105,8 +110,8 @@ def texto_clasulas(cliente=None, codigo=None,bairro=None,  endereco=None, numero
         f"englobando a montagem do cenário e a prestação dos serviços."
       ),
       'valor_pagemento': (
-        f"O valor total ajustado para o presente contrato é de <b>R${valor} "
-        f"({converter_numero_extenso(valor) if valor else ''})</b>, a ser adimplido através de "
+        f"O valor total ajustado para o presente contrato é de <b>R$ {valor} "
+        f"({converter_numero_extenso(valor) if valor else ''})</b>, a ser adimplido mediante de "
         f"<b>{forma_de_pagamento}</b>, constando atualmente como "
         f"<b>{estado}</b>."
       ),
@@ -227,8 +232,9 @@ def contrato_forum():
    
 async def gerar_contrato(request: Request):
   campos_dict = await request.json()
-  print(campos_dict)
 
+
+  nome_ortografico(campos_dict.get("nome_completo"))
 
   contrato_preambulo(
     campos_dict.get("nome_completo"),
@@ -257,7 +263,6 @@ async def gerar_contrato(request: Request):
   contrato_responsabilidade()
   contrato_multa("07", "30")
   contrato_forum()
-  pdf.showPage()
   pdf.save()
 
 class Contratos(SQLModel, table=True):
@@ -336,9 +341,9 @@ async def criar_contrato(request: Request):
       campo = re.sub("_", " ", c)
       conteudo_campo = campos_dict[f'{c}']
 
-      if conteudo_campo is None:
+      if conteudo_campo is None and campo != "tema":
         raise HTTPException(detail=f"o {campo} esta vazio, e preciso prenechelo editando", status_code=422)
-    
+      
     try:  
         with Session(engine) as session:
             contrato = Contratos(
@@ -354,6 +359,7 @@ async def criar_contrato(request: Request):
         criar_festa(
           contrato=contrato,
           contrato_id=contrato.id,
+          tema=campos_dict.get("tema"),
           bairro_festa=campos_dict.get("bairro"),
           endereco_festa=campos_dict.get("endereco"), 
           numero_festa=campos_dict.get("numero"), 
